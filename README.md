@@ -1,4 +1,4 @@
-# ProjectGroup-20
+# Plant Disease Detector
 
 1. Auto Notetaker
 - Goal: Ingests lectures/meetings transcripts and outputs AI generated keyword/insights.
