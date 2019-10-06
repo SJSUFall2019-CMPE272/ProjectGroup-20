@@ -7,5 +7,6 @@
 # Abstract
 
 # Architecture Diagram
+![Diagram](/architecture_diagram.png)
 
 # Technology Stack
