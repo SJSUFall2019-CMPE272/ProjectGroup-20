@@ -10,12 +10,12 @@
 ![Diagram](/architecture_diagram.png)
 
 # Technology Stack
-[IBM Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/)
-[AWS Lambda](https://aws.amazon.com/lambda/)
-[Amazon S3](https://aws.amazon.com/s3/)
-[Amazon DynamoDB](https://aws.amazon.com/dynamodb/)
-[React](https://reactjs.org/)
-[Node.js](https://nodejs.org/)
-[Kubernetes](https://kubernetes.io/)
-[Docker](https://www.docker.com/)
+[IBM Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/)<br />
+[AWS Lambda](https://aws.amazon.com/lambda/)<br />
+[Amazon S3](https://aws.amazon.com/s3/)<br />
+[Amazon DynamoDB](https://aws.amazon.com/dynamodb/)<br />
+[React](https://reactjs.org/)<br />
+[Node.js](https://nodejs.org/)<br />
+[Kubernetes](https://kubernetes.io/)<br />
+[Docker](https://www.docker.com/)<br />
 [Jenkins](https://jenkins.io/)
