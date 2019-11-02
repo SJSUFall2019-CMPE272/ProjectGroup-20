@@ -1,4 +1,10 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Run using Docker
+
+To build Docker image run "docker build -t plant-front-end:dev ."
+
+To start created Docker image run "docker run -p 3001:3000 plant-front-end:dev"
+
+Navigate to "localhost:3001"
 
 ## Available Scripts
 
