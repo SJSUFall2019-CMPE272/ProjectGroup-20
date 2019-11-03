@@ -23,6 +23,9 @@ Agriculture in the United States is a major driver of economic growth, accountin
 [Docker](https://www.docker.com/)<br />
 [Jenkins](https://jenkins.io/)
 
+# Design Thinking
+The Web app allows family farms to use computer vision to measure crop health and analyze historical trends with ease.
+
 # Sources 
 
 1. https://www.ers.usda.gov/data-products/ag-and-food-statistics-charting-the-essentials/ag-and-food-sectors-and-the-economy/
