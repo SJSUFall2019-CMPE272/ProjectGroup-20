@@ -1,14 +1,17 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var logger = require('morgan');
 var routes = require("./routes/routes.js");
-var app = express();
-const multerConfig = require("./config/multer");
 
+var app = express();
+const port = process.env.PORT || 3000;
+
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 routes(app);
 
-var server = app.listen(3000, function () {
-    console.log("app running on port.", server.address().port);
+app.listen(port, function () {
+    console.log(`App listening on port ${port}!`);
 });
