@@ -1,7 +1,12 @@
-FROM node:10-alpine
+FROM node:10-alpine as builder
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 RUN yarn install --silent
 COPY . .
-CMD ["yarn", "start"]
+RUN yarn run build
+
+FROM node:10-alpine
+RUN yarn global add serve
+WORKDIR /app
+COPY --from=builder /app/build .
+CMD ["serve", "-p", "80", "-s", "."]
