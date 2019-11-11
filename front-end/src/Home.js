@@ -1,45 +1,19 @@
-import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
-
-export class DropZoneComp extends Component {
-    onDrop = (acceptedFiles) => {
-        console.log(acceptedFiles);
-      }
-    
-      render() {
-          const maxSize = 10;
-        return (
-          <div className="text-center mt-5">
-            <Dropzone 
-            onDrop={this.onDrop}
-            accept="image/png, image/jpeg"
-            minSize={0}
-            maxSize={maxSize}
-            multiple>
-              {({getRootProps, getInputProps, isDragActive, isDragReject, rejectedFiles}) => {
-            const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
-            return (
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {!isDragActive && 'Click here to drop the baby!'}
-              {isDragActive && isDragReject && "I was kidding you psycho, but ok i guess"}
-              {isDragActive && !isDragReject && "File type not accepted, sorry!"}
-              {isFileTooLarge && (
-                <div className="text-danger mt-2">
-                  File is too large.
-                </div>
-              )}
-            </div>
-          )}
-        }
-            </Dropzone>
-          </div>
-        );
-      }
-}
+import React from 'react';
+import DropZoneComp from './components/Dropzone'
+import { Container, Row, Col } from 'react-bootstrap';
 
 export const Home = () => (
     <div>
-        <DropZoneComp/>
+      <Container>
+        <Row>
+          <Col>
+            How to use: <br/>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquet lectus proin nibh nisl condimentum. Sed odio morbi quis commodo odio aenean. Ut tortor pretium viverra suspendisse potenti nullam. Id nibh tortor id aliquet lectus proin nibh nisl condimentum. Quis hendrerit dolor magna eget est lorem ipsum. Consectetur adipiscing elit ut aliquam. Quisque id diam vel quam elementum pulvinar etiam non quam. Amet risus nullam eget felis eget nunc lobortis. Consequat nisl vel pretium lectus. Arcu felis bibendum ut tristique et egestas quis ipsum. Felis bibendum ut tristique et egestas quis ipsum suspendisse ultrices.
+          </Col>
+          <Col>
+            <DropZoneComp/>
+          </Col>
+        </Row>
+      </Container>
     </div>
 )
