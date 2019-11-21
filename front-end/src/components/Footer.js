@@ -15,17 +15,16 @@ const Styles = styled.div`
     }
 `;
 
-export const NavigationBar = () =>(
+export const Footer = () =>(
     <Styles>
-        <Navbar sticky="top" expand="lg">
-            <Navbar.Brand href="/">PDD</Navbar.Brand>
-            <Navbar.Toggle aria-controls = "basic-navbar-nav"/>
-            <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar fixed="bottom" expand="lg">
+            
                 <Nav.Item><Nav.Link href="/">Home</Nav.Link></Nav.Item>
                 <Nav.Item><Nav.Link href="/about">About</Nav.Link></Nav.Item>
                 <Nav.Item><Nav.Link href="/contact">Contact</Nav.Link></Nav.Item>
                 <Nav.Item><Nav.Link href="/login">Login</Nav.Link></Nav.Item>
-            </Navbar.Collapse>
+            
+
         </Navbar>
     </Styles>
 )

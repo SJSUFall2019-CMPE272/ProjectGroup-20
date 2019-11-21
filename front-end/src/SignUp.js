@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Button,Nav,ButtonGroup,Form,FormGroup,FormControl,InputGroup} from 'react-bootstrap'
+import {Button,ButtonGroup,Form,FormGroup,FormControl,InputGroup} from 'react-bootstrap'
 import './App.css'
 import {NavLink} from 'react-router-dom'
 
@@ -23,15 +23,14 @@ const Style = styled.div`
 }
 `;
 
-export class Login extends React.Component{
-    handleClick(e){
-        console.log(e.target.parentElement.getAttribute('name'));
+export class SignUp extends React.Component{
+    handleRClick(e){
+        console.log("HI")
     }
     render(){
-        
         return(
             <Form className="hi">
-                <p className="p">Login</p>
+                <p className="p">Register</p>
                 <FormGroup>
                     <div>
                     <InputGroup>
@@ -64,11 +63,11 @@ export class Login extends React.Component{
                     
                     </div>
                 </FormGroup>
-                <Button className="btn-dark btn-block">Log in</Button>
+                <Button onClick={this.handleRClick.bind(this)} className="btn-dark btn-block">Sign Up</Button>
                 <div className="text-center">
                     <p>
-                    No account? Create and account 
-                    <NavLink to="sign-up"> here.</NavLink>
+                    Already have an account? Sign in
+                    <NavLink to="Login"> here.</NavLink>
                     <span className="p-2"></span>
                     </p>
                 </div>
@@ -77,7 +76,3 @@ export class Login extends React.Component{
         )
     }
 }
-
-
-
-
