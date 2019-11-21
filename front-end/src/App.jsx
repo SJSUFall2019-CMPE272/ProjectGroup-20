@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import './App.css';
 import {Footer} from './components/Footer'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import {Home, DropZoneComp} from './Home/Home'
+import Home,{ DropZoneComp} from './Home/Home'
 import {Contact} from './Contact'
 import {About} from './About'
 import {Login} from './Login'
