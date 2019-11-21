@@ -1,6 +1,31 @@
 var jwt = require('jsonwebtoken')
 var jwkToPem = require('jwk-to-pem')
+var fs = require('fs')
+var VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3')
+var { IamAuthenticator } = require('ibm-watson/auth')
 require('dotenv').config()
+
+const visualRecognition = new VisualRecognitionV3({
+  url: 'https://gateway.watsonplatform.net/visual-recognition/api',
+  version: '2018-03-19',
+  authenticator: new IamAuthenticator({ apikey: process.env.watson_token })
+})
+
+const classify = function (url) {
+  return new Promise(function (resolve, reject) {
+    visualRecognition.classify({
+      imagesFile: fs.createReadStream(url)
+    })
+      .then(response => {
+        console.log(response)
+        resolve(JSON.stringify(response.result, null, 2))
+      })
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      })
+  })
+}
 
 function validateToken (req, res, next) {
   fetch(`${process.env.cognito_issuer}/${process.env.cognito_pool_id}/.well-known/jwks.json`)
@@ -45,3 +70,4 @@ function validateToken (req, res, next) {
 }
 
 exports.validateToken = validateToken
+exports.classify = classify
