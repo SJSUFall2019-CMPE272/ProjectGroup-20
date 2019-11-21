@@ -15,10 +15,10 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/upload', validateToken, uploadRouter)
+app.use('/upload', uploadRouter)
 app.use('/openclassify', openClassifyRouter)
 app.use('/auth', authRouter)
-app.use('/', indexRouter)
+app.use('/', validateToken, indexRouter)
 
 app.listen(port, function () {
   console.log(`App listening on port ${port}!`)
