@@ -17,11 +17,9 @@ const classify = function (url) {
       imagesFile: fs.createReadStream(url)
     })
       .then(response => {
-        console.log(response)
-        resolve(JSON.stringify(response.result, null, 2))
+        resolve(response.result)
       })
       .catch(err => {
-        console.log(err)
         reject(err)
       })
   })
