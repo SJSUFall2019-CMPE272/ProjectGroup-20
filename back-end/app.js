@@ -14,6 +14,7 @@ const port = process.env.PORT || 3000
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static('public'))
 
 app.use('/upload', uploadRouter)
 app.use('/openclassify', openClassifyRouter)
