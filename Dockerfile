@@ -7,6 +7,25 @@ COPY front-end .
 RUN yarn run build
 
 FROM node:10-alpine
+
+ARG cloudant_username
+ENV cloudant_username=${cloudant_username}
+
+ARG cloudant_password
+ENV cloudant_password=${cloudant_password}
+
+ARG cognito_client_id
+ENV cognito_client_id=${cognito_client_id}
+
+ARG cognito_issuer
+ENV cognito_issuer=${cognito_issuer}
+
+ARG watson_token
+ENV watson_token=${watson_token}
+
+ARG classifier_ids
+ENV classifier_ids=${classifier_ids}
+
 WORKDIR /app
 COPY back-end/package*.json ./
 RUN npm install --silent --production
