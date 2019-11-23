@@ -29,6 +29,9 @@ ENV watson_token=${watson_token}
 ARG classifier_ids
 ENV classifier_ids=${classifier_ids}
 
+ARG PORT=80
+ENV PORT=${PORT}
+
 WORKDIR /app
 COPY back-end/package*.json ./
 RUN npm install --silent --production
