@@ -17,6 +17,9 @@ ENV cloudant_password=${cloudant_password}
 ARG cognito_client_id
 ENV cognito_client_id=${cognito_client_id}
 
+ARG cognito_pool_id
+ENV cognito_pool_id=${cognito_pool_id}
+
 ARG cognito_issuer
 ENV cognito_issuer=${cognito_issuer}
 
