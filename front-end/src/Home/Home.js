@@ -25,7 +25,9 @@ const DropZoneContainer = styled.div`
 `;
 
 export default class Home extends Component{
-  
+  constructor(props){
+    super(props)
+  }
   render()
   {
     return(
@@ -80,17 +82,20 @@ class DropZoneComp extends Component {
         selectedfile:null
       }
     }
-    onDrop = () => {
+    onDrop = (acceptedFiles) => {
         const data = new FormData()
-        data.append('file',this.state.selectedFile)
-        axios.post("http://localhost:4000/uploads",data,{})
+        data.append('file',acceptedFiles[0])
+        axios.post("http://localhost:4000/uploads",data)
         .then(res=>{
           console.log(res.statusText)
+        })
+        .catch(err=>{
+          console.log(err)
         })
       }
     
       render() {
-          const maxSize = 1000000;
+          const maxSize = 5000000;
         return (
           <Style>
             <Dropzone 

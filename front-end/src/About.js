@@ -1,6 +1,6 @@
 import React from 'react'
-export const About = () => (
+export const About = props => (
     <div>
-       <p>Detects plant diseases, whats not to get?</p>
+       <p>{props.loggedIn}</p>
     </div>
 )
