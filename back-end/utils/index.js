@@ -1,6 +1,5 @@
 var jwt = require('jsonwebtoken')
 var jwkToPem = require('jwk-to-pem')
-var fs = require('fs')
 var VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3')
 var { IamAuthenticator } = require('ibm-watson/auth')
 require('dotenv').config()
@@ -13,10 +12,10 @@ const visualRecognition = new VisualRecognitionV3({
 
 const classifierIds = process.env.classifier_ids ? process.env.classifier_ids.split(',') : null
 
-const classify = function (url) {
+const classify = function (imageBuffer) {
   return new Promise(function (resolve, reject) {
     visualRecognition.classify({
-      imagesFile: fs.createReadStream(url),
+      imagesFile: imageBuffer,
       classifier_ids: classifierIds
     })
       .then(response => {
