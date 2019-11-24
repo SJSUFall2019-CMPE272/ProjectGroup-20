@@ -11,10 +11,13 @@ const visualRecognition = new VisualRecognitionV3({
   authenticator: new IamAuthenticator({ apikey: process.env.watson_token })
 })
 
+const classifierIds = process.env.classifier_ids ? process.env.classifier_ids.split(',') : null
+
 const classify = function (url) {
   return new Promise(function (resolve, reject) {
     visualRecognition.classify({
-      imagesFile: fs.createReadStream(url)
+      imagesFile: fs.createReadStream(url),
+      classifier_ids: classifierIds
     })
       .then(response => {
         resolve(response.result)
