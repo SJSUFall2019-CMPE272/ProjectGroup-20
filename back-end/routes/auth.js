@@ -10,7 +10,7 @@ const poolData = {
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
 
-router.get('/signin', (req, res) => {
+router.post('/signin', (req, res) => {
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser({ Username: req.body.username, Pool: userPool })
   cognitoUser.authenticateUser(new AmazonCognitoIdentity.AuthenticationDetails({ Username: req.body.username, Password: req.body.password }), {
     onSuccess: function (result) {
