@@ -3,6 +3,9 @@ import Dropzone from 'react-dropzone';
 import {Container,Row,Col,Card,Nav,Image} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
+import {NavigationBar} from '../components/NavigationBar'
+import {Jumbotron} from '../components/Jumbotron'
+
 const Style = styled.div`
 .drop{
    text-align:center;
@@ -22,10 +25,12 @@ const DropZoneContainer = styled.div`
 `;
 
 export default class Home extends Component{
+  
   render()
   {
     return(
-      <Style>
+          <Style>
+        
         <Container>
         <Row>
         <Col>
@@ -61,6 +66,7 @@ export default class Home extends Component{
       
       
       
+      
     
     )
   }
@@ -77,7 +83,7 @@ class DropZoneComp extends Component {
     onDrop = () => {
         const data = new FormData()
         data.append('file',this.state.selectedFile)
-        axios.post("http://localhost:3000/",data,{})
+        axios.post("http://localhost:4000/uploads",data,{})
         .then(res=>{
           console.log(res.statusText)
         })
