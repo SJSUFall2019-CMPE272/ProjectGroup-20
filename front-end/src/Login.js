@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {Button,Nav,ButtonGroup,Form,FormGroup,FormControl,InputGroup} from 'react-bootstrap'
 import './App.css'
 import {NavLink} from 'react-router-dom'
+import axios from 'axios'
 
 const Style = styled.div`
 .box-controller{
@@ -24,8 +25,18 @@ const Style = styled.div`
 `;
 
 export class Login extends React.Component{
+    constructor(props){
+        super(props)
+        this.state={
+            isLoggedIn: false,
+            name :'',
+            password: '',
+        }
+    }
     handleClick(e){
+        this.setState({isLoggedIn:true})
         console.log(e.target.parentElement.getAttribute('name'));
+        
     }
     render(){
         
@@ -61,10 +72,9 @@ export class Login extends React.Component{
                     aria-describedby="basic-addon1"
                     />
                     </InputGroup>
-                    
-                    </div>
+                </div>
                 </FormGroup>
-                <Button className="btn-dark btn-block">Log in</Button>
+                <Button onClick={this.handleClick} className="btn-dark btn-block">Log in</Button>
                 <div className="text-center">
                     <p>
                     No account? Create and account 
