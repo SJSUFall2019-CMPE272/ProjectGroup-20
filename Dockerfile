@@ -32,6 +32,15 @@ ENV classifier_ids=${classifier_ids}
 ARG PORT=80
 ENV PORT=${PORT}
 
+ARG aws_s3_access_key_id
+ENV aws_s3_access_key_id=${aws_s3_access_key_id}
+
+ARG aws_s3_secret_access_key
+ENV aws_s3_secret_access_key=${aws_s3_secret_access_key}
+
+ARG aws_s3_bucket
+ENV aws_s3_bucket=${aws_s3_bucket}
+
 WORKDIR /app
 COPY back-end/package*.json ./
 RUN npm install --silent --production
