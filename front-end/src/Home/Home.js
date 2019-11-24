@@ -80,12 +80,15 @@ class DropZoneComp extends Component {
         selectedfile:null
       }
     }
-    onDrop = () => {
+    onDrop = (acceptedFiles) => {
         const data = new FormData()
-        data.append('file',this.state.selectedFile)
-        axios.post("http://localhost:4000/uploads",data,{})
+        data.append('file',acceptedFiles[0])
+        axios.post("http://localhost:4000/upload",data)
         .then(res=>{
           console.log(res.statusText)
+        })
+        .catch(err=>{
+          console.log(err)
         })
       }
     
