@@ -24,7 +24,7 @@ const Style = styled.div`
     text-align:center;
 }
 .text{
-    width: 5em;
+    width: 10em;
 }
 `;
 
@@ -33,6 +33,7 @@ export class SignUp extends React.Component{
         super(props)
         this.state={
             username: '',
+            email:'',
             password: '',
             password_confirmation: '',
             registration_error:''
@@ -42,21 +43,20 @@ export class SignUp extends React.Component{
     }
     
     handleRClick= e =>{
-        axios.post("http://localhost:4000",{
-            user:{
+        axios.post("http://localhost:4000/registrations",{
                 username:this.state.username,
-                password:this.state.password,
-                password_confirmation:this.state.password_confirmation
-                }
+                email: this.state.email,
+                password:this.state.password
             },{
                 withCredentials: true
             }).then(response=>{
-                if(this.response.status==="created"){
-                    this.props.handleLogin(response.data)
-                    this.props.history.push("/UserDashboard")
+                console.log(response)
+                if(this.response.username===this.state.username){
+                    this.props.handleLogin(response.username)
+                    this.props.history.push("/Confirmation")
                 }
             }).catch(error=>{
-                console.log( error)
+                console.log(error)
             })
         e.preventDefault()
 
@@ -78,10 +78,10 @@ export class SignUp extends React.Component{
                     <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Username</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                     placeholder="Username/Email"
+                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     onChange={this.handleChange.bind(this)}
@@ -94,10 +94,30 @@ export class SignUp extends React.Component{
                     
                 </FormGroup>
                 <FormGroup>
+                    <div>
+                    <InputGroup>
+                    <InputGroup.Prepend>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                     placeholder="Email"
+                    aria-label="Email"
+                    aria-describedby="basic-addon1"
+                    onChange={this.handleChange.bind(this)}
+                    name="email" 
+                    value={this.state.email}
+                    onChange={this.handleChange.bind(this)}
+                    />
+                    </InputGroup>
+                    
+                    </div>
+                    
+                </FormGroup>
+                <FormGroup>
                 <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text name="password" id="inputGroup-sizing-default">Password</InputGroup.Text>
+                    <InputGroup.Text className="text" name="password" id="inputGroup-sizing-default">Password</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                     type="password"
@@ -116,7 +136,7 @@ export class SignUp extends React.Component{
                 <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text name="password" id="inputGroup-sizing-default">Confirm Password</InputGroup.Text>
+                    <InputGroup.Text className="text" name="password" id="inputGroup-sizing-default">Confirm Password</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                     type="password"

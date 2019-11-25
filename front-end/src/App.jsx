@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import './App.css';
 import {Footer} from './components/Footer'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Home,{ DropZoneComp} from './Home/Home'
@@ -16,6 +15,7 @@ import LHome from './LoginPages/LHome'
 import {LAbout} from './LoginPages/LAbout'
 import {LContact} from './LoginPages/LContact'
 import {Dashboard} from './LoginPages/userDashboard'
+import {Confirm} from './components/Confirmation'
 import axios from 'axios'
 
 class App extends Component {
@@ -31,7 +31,7 @@ class App extends Component {
   
   checkLoginStatus(){
     //makes sure that user is logged in after page is reloaded
-    axios.get(axios.post("http://localhost:4000",{withCredentials: true})
+    axios.get(axios.post("http://localhost:4000/registrations",{withCredentials: true})
       .then(response=>{
         //backend says is logged in while front end does not, change front end to logged in
         if(response.data.logged_in && this.state.loggedIn==="false"){
@@ -58,7 +58,7 @@ class App extends Component {
     this.checkLoginStatus()
   } 
   //changes navbar according to whether user is logged in or not (remove login from nav bar)
-  handleLogin(){
+  handleLogin(data){
     this.setState({
       loggedIn: true
     })
@@ -106,6 +106,7 @@ class App extends Component {
                 render = {props=>(<Dashboard {...props} handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>)} 
               />
               <Route component={NoMatch}/>
+              <Route path={"/Confirmation"} component={Confirm}/>
             </Switch>
             </Router>
           </Layout>

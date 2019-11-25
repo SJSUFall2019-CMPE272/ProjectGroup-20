@@ -5,15 +5,14 @@ import './App.css'
 import {NavLink, Link} from 'react-router-dom'
 import axios from 'axios'
 import { bool } from 'prop-types'
+var myStorage = window.localStorage
 
 const Style = styled.div`
 .box-controller{
    width: 100%;
    overflow: hidden;
 }
-.root-container{
-    text-align:center;
-}
+
 .header{
     padding:10px;
     text-align:center;
@@ -22,6 +21,9 @@ const Style = styled.div`
     justify-content:center;
 }.p{
     text-align:center;
+}
+.text{
+    width: 10em;
 }
 `;
 
@@ -37,20 +39,23 @@ export class Login extends React.Component{
         this.handleChange = this.handleChange.bind(this)
     }
     handleClick(e){
-        axios.post("http://localhost:4000",{
-            user:{
+        axios.post("http://localhost:4000/registrations",{
                 username:this.state.username,
                 password:this.state.password
-                }
             },{
                 withCredentials: true
             }).then(response=>{
-                if(this.response.logged_in){
-                    this.props.handleLogin(response.data)
+                if(this.response.token!=null){
+                    myStorage.setItem("token",response.token)
+                    var token = myStorage.getItem("token")
+                    this.props.handleLogin(token)
                     this.props.history.push("/UserDashboard")
                 }
             }).catch(error=>{
+                myStorage.setItem("string","hi")
+                var test = myStorage.getItem("string")
                 console.log(error)
+                this.props.handleLogin(test)
             })
         e.preventDefault()
     }
@@ -66,13 +71,14 @@ export class Login extends React.Component{
     render(){
         
         return(
-            <Form className="hi">
+            <Style>
+                <Form className="hi">
                 <p className="p">Login</p>
                 <FormGroup>
                     <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Email</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                      placeholder="Username/Email"
@@ -91,7 +97,7 @@ export class Login extends React.Component{
                 <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text id="inputGroup-sizing-default">Password</InputGroup.Text>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Password</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                     type="password"
@@ -115,6 +121,8 @@ export class Login extends React.Component{
                 </div>
             </Form>
 
+            </Style>
+            
         )
     }
 }
