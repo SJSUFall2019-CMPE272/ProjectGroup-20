@@ -59,6 +59,7 @@ class App extends Component {
   } 
   //changes navbar according to whether user is logged in or not (remove login from nav bar)
   handleLogin(data){
+    console.log(data)
     this.setState({
       loggedIn: true
     })

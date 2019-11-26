@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Layout} from 'antd'
+import {Layout,Avatar,Menu,Icon,Breadcrumb} from 'antd'
 import {Button} from 'react-bootstrap'
-import {NavLink, Link} from 'react-router-dom'
-import 'antd/dist/antd.css'
-import axios from 'axios'
-const {Header,Footer,Sider,Content} = Layout
+import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
+import Title from 'antd/lib/typography/Title'
+import "antd/dist/antd.css";
+import { SubMenu } from 'rc-menu'
+const {Header,Sider,Content,Footer} = Layout
 
 const Style = styled.div`
     .link{
@@ -13,25 +14,57 @@ const Style = styled.div`
         text-decoration:none
     }
     .sider{
-        background-color: green
+        background-color: white
     }
     .content{
-        min-width: 100vw
         background-color: grey
     }
-    .header{
-        background-color: red
-        display:flex;
-        flex:1
-        flex-direction: row
-        justify-content: center
+    .title{
         color: white
-        min-width: 100vw
-        margin-right: 10em
+    }
+    .lay{
+        background-color: black
+    }
+    .container{
+        text-align : left
+    }
+    .avatar{
+        float:right
+    }
+    .header{
+        padding:1em
     }
 `;
+export class Account extends Component{
+    render(){
+        return(
+            <div>ryan choy</div>
+        )
+    }
+}
+export class LastUpload extends Component{
+    render(){
+        return(
+            <div>last uploaded files</div>
+        )
+    }
+}
 
+export class AllUpload extends Component{
+    render(){
+        return(
+            <div>all uploaded files</div>
+        )
+    }
+}
 
+export class ViewData extends Component{
+    render(){
+        return(
+            <div>viewing current data</div>
+        )
+    }
+}
 export class Dashboard extends Component{
     constructor(props){
         super(props)
@@ -46,18 +79,68 @@ export class Dashboard extends Component{
     render(){
         return(
             <Style>
+                <Router>
+                <div className="container">
                 <Layout>
-                    <Header className="header">PDD User Dashboard</Header>
-                    
+                    <Header className="header">
+                        <Avatar className="avatar" icon="user"/>
+                        <Title className="title" level={3}>PDD User Dashboard</Title>
+                    </Header>
                     <Layout>
-                        <Sider className="sider">sider</Sider>
-                        <Content className="content">something</Content>
-                    </Layout>  
+                        <Sider className="sider">
+                            <Menu
+                                defaultSelectedKeys={['title']}
+                                mode="inline">
+                                <SubMenu
+                                    title={
+                                        <span>
+                                            <Icon type="file-image"/>
+                                            <span>Uploaded files</span>
+                                        </span>
+                                    }>
+                                    <Menu.ItemGroup key='files' title="Files">
+                                        <Menu.Item key='Last'>
+                                            <Link to="/UserDashboard/last">Last uploaded files
+                                            </Link>
+                                        </Menu.Item>
+                                        <Menu.Item key='All'>
+                                            <Link to="/UserDashboard/all">All uploaded files
+                                            </Link>
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                </SubMenu>
+                                <Menu.Item key='View'>
+                                    <Link to="/UserDashboard/view">View data
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key='acc'>
+                                    <Link to="/UserDashboard/account">Account Info
+                                    </Link>
+                                </Menu.Item>
+                            </Menu>
+                        </Sider>
+                        <Layout style={{ padding: '0 24px 24px' }}>
+                            <Content
+                                style={{
+                                background: '#fff',
+                                padding: 24,
+                                margin: 0,
+                                minHeight: 280,
+                                }}
+                            >
+                                <Route exact path="/UserDashboard/last" component={LastUpload}/>
+                                <Route exact path="/UserDashboard/all" component={AllUpload}/>
+                                <Route exact path="/UserDashboard/view" component={ViewData}/>
+                                <Route exact path="/UserDashboard/account" component={Account}/>
+                            </Content>
+                        </Layout>
+                    </Layout>
                 </Layout>
-            
-            <div>
-                <Button onClick={this.handleClick.bind(this)} className="btn-dark btn-block"><Link to="/" className="link" >Log out</Link></Button> 
-            </div>
+                </div>
+                <div>
+                    <Button onClick={this.handleClick.bind(this)} className="btn-dark btn-block"><Link to="/" className="link" >Log out</Link></Button> 
+                </div>
+                </Router>
             </Style>
            
         )
