@@ -4,6 +4,7 @@ const router = express.Router()
 const classify = require('../utils/index').classify
 const validateToken = require('../utils/index').validateToken
 var AWS = require('aws-sdk');
+require('dotenv').config()
 
 router.post('/', multerConfig.upload, (req, res) => {
   classify(req.file.buffer).then(response => {
@@ -20,12 +21,12 @@ router.post('/save', validateToken, multerConfig.uploadToS3, (req, res) => {
 app.get('/image/:keyimg',(req,res) =>{
   AWS.config.update(
   {
-    accessKeyId: "",
-    secretAccessKey: "",
+    accessKeyId: process.env.aws_s3_access_key_id,
+    secretAccessKey: process.env.aws_s3_secret_access_key,
   }
 );
    var s3 = new AWS.S3();
-   var params=  { Bucket: "", Key: req.params.keyimg };
+   var params=  { Bucket: process.env.aws_s3_bucket, Key: req.params.keyimg };
    const path =".."
    var tempFileName = req.params.keyimg;
    var tempFile = fs.createWriteStream(tempFileName);
