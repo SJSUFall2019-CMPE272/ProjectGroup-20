@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken')
 var jwkToPem = require('jwk-to-pem')
 var VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3')
 var { IamAuthenticator } = require('ibm-watson/auth')
+var AWS = require('aws-sdk')
 require('dotenv').config()
 
 const visualRecognition = new VisualRecognitionV3({
@@ -24,6 +25,40 @@ const classify = function (imageBuffer) {
       .catch(err => {
         reject(err)
       })
+  })
+}
+
+AWS.config.update(
+  {
+    accessKeyId: process.env.aws_s3_access_key_id,
+    secretAccessKey: process.env.aws_s3_secret_access_key
+  }
+)
+
+const s3 = new AWS.S3()
+
+const getS3Object = function (key) {
+  console.log(key)
+  return new Promise((resolve, reject) => {
+    s3.getObject({ Bucket: process.env.aws_s3_bucket, Key: key }, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
+const uploadS3Object = function (key, obj) {
+  return new Promise((resolve, reject) => {
+    s3.putObject({ Bucket: process.env.aws_s3_bucket, Key: key, Body: obj }, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
   })
 }
 
@@ -72,3 +107,5 @@ function validateToken (req, res, next) {
 
 exports.validateToken = validateToken
 exports.classify = classify
+exports.getS3Object = getS3Object
+exports.uploadS3Object = uploadS3Object
