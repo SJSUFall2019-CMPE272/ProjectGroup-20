@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import {Container,Row,Col,Card,Nav,Image} from 'react-bootstrap'
+import {Container,Row,Col,Card,Nav,Image,ProgressBar} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
 import {NavigationBar} from '../components/NavigationBar'
@@ -85,7 +85,11 @@ class DropZoneComp extends Component {
     onDrop = (acceptedFiles) => {
         const data = new FormData()
         data.append('file',acceptedFiles[0])
-        axios.post("http://localhost:4000/upload",data)
+        axios.post("http://173.193.106.54:30959/upload",data,{
+          onUploadProgress:progressEvent=>{
+            console.log(progressEvent.loaded)
+          }
+        })
         .then(res=>{
           console.log(res.statusText)
         })
@@ -95,14 +99,14 @@ class DropZoneComp extends Component {
       }
     
       render() {
-          const maxSize = 5000000;
+          const maxSize = 5000000000;
         return (
           <Style>
             <Dropzone 
             className="drop"
             style={{}}
             onDrop={this.onDrop}
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg,image/jpg"
             minSize={0}
             maxSize={maxSize}
             multiple>
