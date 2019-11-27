@@ -5,6 +5,7 @@ var logger = require('morgan')
 var uploadRouter = require('./routes/upload')
 var authRouter = require('./routes/auth')
 var testRouter = require('./routes/test')
+var classifyRouter = require('./routes/classify')
 // var validateToken = require('./utils/index').validateToken
 global.fetch = require('node-fetch')
 
@@ -19,6 +20,7 @@ app.use(express.static('public'))
 app.use('/upload', uploadRouter)
 app.use('/test', testRouter)
 app.use('/auth', authRouter)
+app.use('/classify', classifyRouter)
 
 // TODO: to implement a protected route, use the validateToken middleware
 // app.use('/', validateToken, indexRouter)
