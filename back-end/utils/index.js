@@ -56,10 +56,11 @@ function validateToken (req, res, next) {
         return res.status(401).send('Invalid token')
       }
 
-      jwt.verify(req.headers.token, pem, function (err, payload) {
+      jwt.verify(req.headers.token, pem, (err, payload) => {
         if (err) {
           return res.status(401).send('Invalid Token.')
         } else {
+          res.locals.auth = payload
           next()
         }
       })
