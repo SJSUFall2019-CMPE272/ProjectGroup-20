@@ -35,14 +35,14 @@ const Style = styled.div`
         padding:1em
     }
 `;
-export class Account extends Component{
+class Account extends Component{
     render(){
         return(
             <div>ryan choy</div>
         )
     }
 }
-export class LastUpload extends Component{
+class LastUpload extends Component{
     render(){
         return(
             <div>last uploaded files</div>
@@ -50,7 +50,7 @@ export class LastUpload extends Component{
     }
 }
 
-export class AllUpload extends Component{
+class AllUpload extends Component{
     render(){
         return(
             <div>all uploaded files</div>
@@ -58,7 +58,7 @@ export class AllUpload extends Component{
     }
 }
 
-export class ViewData extends Component{
+class ViewData extends Component{
     render(){
         return(
             <div>viewing current data</div>
