@@ -33,13 +33,41 @@ router.get('/image/:keyimg', validateToken, (req, res) => {
   })
 })
 
-router.get('/list', validateToken, (req, res) => {
-  const s3Name = res.locals.auth.username 
-  getS3list(s3Name).then((data) => {
-    res.status(200).send(data)
-  }).catch(err => {
-    res.status(400).send(err)
-  })
-})
+router.get('/list',validateToken, (req,res) =>{
+  AWS.config.update(
+  {
+    accessKeyId: process.env.aws_s3_access_key_id,
+    secretAccessKey: process.env.aws_s3_secret_access_key,
+  }
+);
+   var keys=[];
+   var obj ={}
+   var s3 = new AWS.S3();
+   var allKeys = [];
+
+function getkeys(info){
+ for(i=0;i < info.length; i++){
+    for(var key in info[i]) {
+	for(var data in info[i][key]){
+    	if(data == 'Key'){
+	console.log(info[i][key][data]);
+	if(info[i][key][data].includes(res.locals.auth.username)){
+	keys.push(info[i][key][data]);
+	      }
+	    }
+    }
+  }
+}
+return res.json(keys);
+}  
+  function listAllKeys( cb) 
+  {
+  s3.listObjects({Bucket: process.env.aws_s3_bucket}, function(err, data){
+   allKeys.push(data.Contents);
+	getkeys(allKeys);
+   });
+  }
+  listAllKeys(listAllKeys);
+});
 
 module.exports = router
