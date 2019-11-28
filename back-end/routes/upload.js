@@ -33,4 +33,13 @@ router.get('/image/:keyimg', validateToken, (req, res) => {
   })
 })
 
+router.get('/list', validateToken, (req, res) => {
+  const s3Name = res.locals.auth.username 
+  getS3list(s3Name).then((data) => {
+    res.status(200).send(data)
+  }).catch(err => {
+    res.status(400).send(err)
+  })
+})
+
 module.exports = router
