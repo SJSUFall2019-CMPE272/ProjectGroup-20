@@ -4,7 +4,7 @@ const router = express.Router()
 const classify = require('../utils/index').classify
 const uploadS3Object = require('../utils/index').uploadS3Object
 const getS3Object = require('../utils/index').getS3Object
-const getS3Object = require('../utils/index').deleteS3Object
+const deleteS3Object = require('../utils/index').deleteS3Object
 const validateToken = require('../utils/index').validateToken
 const AWS = require('aws-sdk')
 require('dotenv').config()
