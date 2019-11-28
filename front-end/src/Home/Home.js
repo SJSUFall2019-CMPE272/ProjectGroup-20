@@ -23,27 +23,32 @@ const DropZoneContainer = styled.div`
   text-align:centr;
 `;
 
-class OverallData extends Component{
-  render(){
-      return(
-          <div>Overall data</div>
-      )
-  }
-}
 
-class CurrentData extends Component{
-  render(){
-      return(
-        <div>Current data</div>
-      )
-  }
-}
+
 
 export default class Home extends Component{
   constructor(props){
     super(props)
+    this.setState({
+      id: '',
+      label: ''
+    })
   }
-  
+
+  handleFirst(){
+    axios.get('http://localhost:4000/upload')
+      .then(response=>{
+        response.data.Id=this.state.id
+        response.data.Label=this.state.label
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    console.log("hi")
+  }
+ 
+    
+
   render()
   {
     return(
@@ -57,7 +62,7 @@ export default class Home extends Component{
             <Card.Header>
               <Nav variant="tabs" defaultActiveKey="1">
                 <Nav.Item>
-                  <Nav.Link eventKey="1"><Link to="/first">
+                  <Nav.Link onSelect={this.handleFirst.bind(this)} eventKey="1"><Link to="/first">
                     Overall Data
                   </Link></Nav.Link>
                 </Nav.Item>
@@ -69,8 +74,12 @@ export default class Home extends Component{
               </Nav>
             </Card.Header>
             <Card.Body>
-            <Route path="/first" component={OverallData}/>
-            <Route path="/second" component={CurrentData}/>
+            <Route path="/first">
+              <div>Overall data</div>
+              </Route>
+            <Route path="/second">
+            <div>Current Data</div>
+              </Route>
             </Card.Body>
           </Card>
           </Row>
@@ -107,7 +116,7 @@ class DropZoneComp extends Component {
     onDrop = (acceptedFiles) => {
         const data = new FormData()
         data.append('file',acceptedFiles[0])
-        axios.post("http://173.193.106.54:30959/upload",data,{
+        axios.post("http://localhost:4000/upload",data,{
           onUploadProgress:progressEvent=>{
             console.log(progressEvent.loaded)
           }
