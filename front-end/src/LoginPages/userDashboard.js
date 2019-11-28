@@ -6,6 +6,7 @@ import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
 import "antd/dist/antd.css";
 import { SubMenu } from 'rc-menu'
+import Axios from 'axios'
 const {Header,Sider,Content,Footer} = Layout
 
 const Style = styled.div`
@@ -35,41 +36,12 @@ const Style = styled.div`
         padding:1em
     }
 `;
-class Account extends Component{
-    render(){
-        return(
-            <div>ryan choy</div>
-        )
-    }
-}
-class LastUpload extends Component{
-    render(){
-        return(
-            <div>last uploaded files</div>
-        )
-    }
-}
 
-class AllUpload extends Component{
-    render(){
-        return(
-            <div>all uploaded files</div>
-        )
-    }
-}
-
-class ViewData extends Component{
-    render(){
-        return(
-            <div>viewing current data</div>
-        )
-    }
-}
 export class Dashboard extends Component{
     constructor(props){
         super(props)
         this.state={
-            name :'',
+            name :'Ryan',
             password: '',
         }
     }
@@ -128,10 +100,26 @@ export class Dashboard extends Component{
                                 minHeight: 280,
                                 }}
                             >
-                                <Route exact path="/UserDashboard/last" component={LastUpload}/>
-                                <Route exact path="/UserDashboard/all" component={AllUpload}/>
-                                <Route exact path="/UserDashboard/view" component={ViewData}/>
-                                <Route exact path="/UserDashboard/account" component={Account}/>
+                                <Route exact path="/UserDashboard/last">
+                                    Last uploaded file
+                                </Route>
+                                <Route exact path="/UserDashboard/all">
+                                    All uploaded files
+                                </Route>
+                                <Route exact path="/UserDashboard/view">
+                                    View data
+                                </Route>
+                                <Route exact path="/UserDashboard/account">
+                                    <div>
+                                    {
+                                        this.state.name
+                                        //Axios.get("http://localhost:4000/registrations")
+                                         //   .then(response=>{
+                                                
+                                         //   })
+                                    }
+                                    </div>
+                                </Route>
                             </Content>
                         </Layout>
                     </Layout>

@@ -4,6 +4,7 @@ const router = express.Router()
 const classify = require('../utils/index').classify
 const uploadS3Object = require('../utils/index').uploadS3Object
 const getS3Object = require('../utils/index').getS3Object
+const deleteS3Object = require('../utils/index').deleteS3Object
 const validateToken = require('../utils/index').validateToken
 const AWS = require('aws-sdk')
 require('dotenv').config()
@@ -28,6 +29,15 @@ router.post('/save', validateToken, multerConfig.upload, (req, res) => {
 router.get('/image/:keyimg', validateToken, (req, res) => {
   const s3Name = res.locals.auth.username + '/' + req.params.keyimg
   getS3Object(s3Name).then((data) => {
+    res.status(200).send(data)
+  }).catch(err => {
+    res.status(400).send(err)
+  })
+})
+
+router.get('/delete/:keyimg', validateToken, (req, res) => {
+  const s3Name = res.locals.auth.username + '/' + req.params.keyimg
+  deleteS3Object(s3Name).then((data) => {
     res.status(200).send(data)
   }).catch(err => {
     res.status(400).send(err)
