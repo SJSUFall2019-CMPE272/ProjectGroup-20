@@ -33,28 +33,50 @@ export class Login extends React.Component{
         this.state={
         username: '',
         password: '',
-        login_error:''
+        login_error:'',
+        confirmationCode: '',
+        confirmationNeeded: false
         }
         this.handleClick = this.handleClick.bind(this)
         this.handleChange = this.handleChange.bind(this)
     }
-    handleClick(e){
+    signinRequest() {
         axios.post("http://localhost:4000/auth/signin",{
                 username:this.state.username,
                 password:this.state.password
             }).then(response=>{
-                if(this.response.token!=null){
-                    myStorage.setItem("token",response.token)
+                console.log(response)
+                if(response.data.accessToken!=null){
+                    myStorage.setItem("token",response.data.accessToken)
                     var token = myStorage.getItem("token")
                     this.props.handleLogin(token)
                     this.props.history.push("/UserDashboard")
                 }
             }).catch(error=>{
+                if (error.response && error.response.data && error.response.data.code == 'UserNotConfirmedException') {
+                    this.state.confirmationNeeded = true
+                    this.forceUpdate()
+                    return
+                }
                 myStorage.setItem("string","hi")
                 var test = myStorage.getItem("string")
-                console.log(error)
                 this.props.handleLogin(test)
             })
+    }
+    handleClick(e){
+        if (this.state.confirmationNeeded) {
+            axios.post("http://localhost:4000/auth/confirm",{
+                    username:this.state.username,
+                    confirmationCode:this.state.confirmationCode
+                }).then(response=>{
+                    this.signinRequest()
+                }).catch(error=>{
+                    console.log(error)
+                })
+        }
+        else {
+            this.signinRequest()
+        }
         e.preventDefault()
     }
     handleChange (e){
@@ -67,6 +89,29 @@ export class Login extends React.Component{
     }
 
     render(){
+        const confirmationNeeded = this.state.confirmationNeeded;
+        let confirmationBox;
+
+        if (confirmationNeeded) {
+            confirmationBox = <FormGroup>
+                <div>
+                <InputGroup>
+                <InputGroup.Prepend>
+                <InputGroup.Text className="text" id="inputGroup-sizing-default">Confirmation Code</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                placeholder="Confirmation Code"
+                aria-label="confirmationCode"
+                aria-describedby="basic-addon1"
+                onChange={this.handleChange.bind(this)}
+                name="confirmationCode" 
+                value={this.state.confirmationCode}
+                />
+                </InputGroup>
+                </div>
+            </FormGroup>;
+        }
+
         
         return(
             <Style>
@@ -109,6 +154,7 @@ export class Login extends React.Component{
                     </InputGroup>
                 </div>
                 </FormGroup>
+                {confirmationBox}
                 <Button to ={"/LHome"} onClick={this.handleClick.bind(this)} className="btn-dark btn-block">Log in</Button>
                 <div className="text-center">
                     <p>
