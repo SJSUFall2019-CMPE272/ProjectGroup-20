@@ -43,12 +43,10 @@ export class SignUp extends React.Component{
     }
     
     handleRClick= e =>{
-        axios.post("http://localhost:4000/registrations",{
+        axios.post("http://localhost:4000/auth/register",{
                 username:this.state.username,
                 email: this.state.email,
                 password:this.state.password
-            },{
-                withCredentials: true
             }).then(response=>{
                 console.log(response)
                 if(this.response.username===this.state.username){

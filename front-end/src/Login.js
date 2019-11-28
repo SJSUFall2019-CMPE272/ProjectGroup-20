@@ -39,11 +39,9 @@ export class Login extends React.Component{
         this.handleChange = this.handleChange.bind(this)
     }
     handleClick(e){
-        axios.post("http://localhost:4000/registrations",{
+        axios.post("http://localhost:4000/auth/signin",{
                 username:this.state.username,
                 password:this.state.password
-            },{
-                withCredentials: true
             }).then(response=>{
                 if(this.response.token!=null){
                     myStorage.setItem("token",response.token)

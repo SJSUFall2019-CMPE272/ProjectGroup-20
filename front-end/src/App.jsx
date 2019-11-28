@@ -31,7 +31,7 @@ class App extends Component {
   
   checkLoginStatus(){
     //makes sure that user is logged in after page is reloaded
-    axios.get(axios.post("http://localhost:4000/registrations",{withCredentials: true})
+    axios.get(axios.post("http://localhost:4000/auth/register")
       .then(response=>{
         //backend says is logged in while front end does not, change front end to logged in
         if(response.data.logged_in && this.state.loggedIn==="false"){
@@ -106,8 +106,8 @@ class App extends Component {
                 path={"/UserDashboard"}
                 render = {props=>(<Dashboard {...props} handleLogOut={this.handleLogOut} loggedIn={this.state.loggedIn}/>)} 
               />
-              <Route component={NoMatch}/>
               <Route path={"/Confirmation"} component={Confirm}/>
+              <Route component={NoMatch}/>
             </Switch>
             </Router>
           </Layout>
