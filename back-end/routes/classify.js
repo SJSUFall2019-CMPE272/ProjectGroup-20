@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const tf =  require('@tensorflow/tfjs-node')
 const tfds =  require('@tensorflow/tfjs-data')
+const jpeg = require('jpeg-js');
+const multerConfig = require('../config/multer')
 
 const modelURL = "https://plantdiseasemodel.s3-us-west-1.amazonaws.com/model.json";
 
@@ -21,8 +23,8 @@ const classes = ['Potato___Early_blight',
                  'Tomato_Septoria_leaf_spot', 
                  'Tomato__Tomato_YellowLeaf__Curl_Virus']
 
-router.get('/', function (req, res) {
-    prediction = predict().then(
+router.post('/', multerConfig.upload, function (req, res) {
+    prediction = predict(req.file).then(
         prediction => {
             console.log(prediction);
             res.status(200).send(prediction)
@@ -30,13 +32,16 @@ router.get('/', function (req, res) {
     );
 })
 
-const predict = async function() {
+const predict = async function(data) {
+
+    //const image = jpeg.decode(data.buf, true);
     model = await tf.loadLayersModel(modelURL);
 
     model.summary();
     // TODO - convert multer image to tensor and process
     // Using placeholder tensor for now
-    const processedImg = processImage();  // for example
+    console.log(data)
+    const processedImg = processImage(data.buffer);  // for example
     const logits = model.predict(processedImg);
     const prediction = logits.as1D().argMax();
     const classID = (await prediction.data())[0];
@@ -47,12 +52,20 @@ const predict = async function() {
     };
 }
 
-function processImage() {
-    img = tf.ones([96, 96, 3], "float32")
+function processImage(img) {
+    img_decoded = jpeg.decode(img, true); 
+    console.log(img_decoded.data)
+
+    //img_decoded.data.filter(function(pixel) {return pixel }
+    img_tensor = tf.ones([256, 256, 3], "float32");
+    //img_tensor = tf.tensor(img_decoded.data, [256, 256, 4], "float32")
+    img_tensor.print()
     const processedImg =
-        tf.tidy(() => img.expandDims(0).toFloat());
-    img.dispose();
+        tf.tidy(() => tf.image.resizeNearestNeighbor(img_tensor.expandDims(0).toFloat(), 
+                                                    [96, 96]))
+    img_tensor.dispose();
     return processedImg;
   }
 
 module.exports = router
+ 
