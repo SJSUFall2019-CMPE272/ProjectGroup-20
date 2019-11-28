@@ -56,12 +56,12 @@ function processImage(img) {
     img_decoded = jpeg.decode(img, true); 
     console.log(img_decoded.data)
 
-    //img_decoded.data.filter(function(pixel) {return pixel }
-    img_tensor = tf.ones([256, 256, 3], "float32");
-    //img_tensor = tf.tensor(img_decoded.data, [256, 256, 4], "float32")
+    img_no_alhpa = img_decoded.data.filter((elem, i) => (i % 4) != 3);
+    //img_tensor = tf.ones([256, 256, 3], "float32");
+    img_tensor = tf.tensor(img_no_alhpa, [256, 256, 3], "float32")
     img_tensor.print()
     const processedImg =
-        tf.tidy(() => tf.image.resizeNearestNeighbor(img_tensor.expandDims(0).toFloat(), 
+        tf.tidy(() => tf.image.resizeBilinear(img_tensor.expandDims(0), 
                                                     [96, 96]))
     img_tensor.dispose();
     return processedImg;
