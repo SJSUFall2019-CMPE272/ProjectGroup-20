@@ -5,6 +5,7 @@ const classify = require('../utils/index').classify
 const uploadS3Object = require('../utils/index').uploadS3Object
 const getS3Object = require('../utils/index').getS3Object
 const validateToken = require('../utils/index').validateToken
+const AWS = require('aws-sdk')
 require('dotenv').config()
 
 router.post('/', multerConfig.upload, (req, res) => {
@@ -33,41 +34,43 @@ router.get('/image/:keyimg', validateToken, (req, res) => {
   })
 })
 
-router.get('/list',validateToken, (req,res) =>{
+router.get('/list', validateToken, (req, res) => {
   AWS.config.update(
-  {
-    accessKeyId: process.env.aws_s3_access_key_id,
-    secretAccessKey: process.env.aws_s3_secret_access_key,
-  }
-);
-   var keys=[];
-   var obj ={}
-   var s3 = new AWS.S3();
-   var allKeys = [];
-
-function getkeys(info){
- for(i=0;i < info.length; i++){
-    for(var key in info[i]) {
-	for(var data in info[i][key]){
-    	if(data == 'Key'){
-	console.log(info[i][key][data]);
-	if(info[i][key][data].includes(res.locals.auth.username)){
-	keys.push(info[i][key][data]);
-	      }
-	    }
+    {
+      accessKeyId: process.env.aws_s3_access_key_id,
+      secretAccessKey: process.env.aws_s3_secret_access_key
     }
+  )
+  var keys = []
+  var obj = {}
+  var s3 = new AWS.S3()
+  var allKeys = []
+
+  function getkeys (info) {
+    for (var i = 0; i < info.length; i++) {
+      for (var key in info[i]) {
+        for (var data in info[i][key]) {
+          if (data == 'Key') {
+            console.log(info[i][key][data])
+            if (info[i][key][data].includes(res.locals.auth.username)) {
+              keys.push(info[i][key][data])
+            }
+          }
+        }
+      }
+    }
+    return res.json(keys)
   }
-}
-return res.json(keys);
-}  
-  function listAllKeys( cb) 
-  {
-  s3.listObjects({Bucket: process.env.aws_s3_bucket}, function(err, data){
-   allKeys.push(data.Contents);
-	getkeys(allKeys);
-   });
+  function listAllKeys (cb) {
+    s3.listObjects({ Bucket: process.env.aws_s3_bucket }, function (err, data) {
+      if (err) {
+        return err
+      }
+      allKeys.push(data.Contents)
+      getkeys(allKeys)
+    })
   }
-  listAllKeys(listAllKeys);
-});
+  listAllKeys(listAllKeys)
+})
 
 module.exports = router
