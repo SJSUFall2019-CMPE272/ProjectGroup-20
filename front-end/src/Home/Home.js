@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import {Container,Row,Col,Card,Nav,Image} from 'react-bootstrap'
+import {Container,Row,Col,Card,Nav,Image,ProgressBar} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
-import {NavigationBar} from '../components/NavigationBar'
-import {Jumbotron} from '../components/Jumbotron'
+import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 
 const Style = styled.div`
 .drop{
@@ -24,32 +23,55 @@ const DropZoneContainer = styled.div`
   text-align:centr;
 `;
 
+class OverallData extends Component{
+  render(){
+      return(
+          <div>Overall data</div>
+      )
+  }
+}
+
+class CurrentData extends Component{
+  render(){
+      return(
+        <div>Current data</div>
+      )
+  }
+}
+
 export default class Home extends Component{
+  constructor(props){
+    super(props)
+  }
   
   render()
   {
     return(
           <Style>
-        
+        <Router>
         <Container>
         <Row>
         <Col>
           <Row className="rowInfo">
           <Card border="dark" style={{width:'30em',height:'31em'}}>
             <Card.Header>
-              <Nav variant="tabs" defaultActiveKey='#first'>
+              <Nav variant="tabs" defaultActiveKey="1">
                 <Nav.Item>
-                  <Nav.Link href='#first'>
+                  <Nav.Link eventKey="1"><Link to="/first">
                     Overall Data
-                  </Nav.Link>
+                  </Link></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link href='#second'>
+                  <Nav.Link eventKey="2"><Link to="/second">
                     Current Plant Data
-                  </Nav.Link>
+                  </Link></Nav.Link>
                 </Nav.Item>
               </Nav>
             </Card.Header>
+            <Card.Body>
+            <Route path="/first" component={OverallData}/>
+            <Route path="/second" component={CurrentData}/>
+            </Card.Body>
           </Card>
           </Row>
           
@@ -62,6 +84,8 @@ export default class Home extends Component{
         </Row>
         
       </Container>
+        </Router>
+        
       </Style>
       
       
@@ -83,7 +107,11 @@ class DropZoneComp extends Component {
     onDrop = (acceptedFiles) => {
         const data = new FormData()
         data.append('file',acceptedFiles[0])
-        axios.post("http://localhost:4000/upload",data)
+        axios.post("http://173.193.106.54:30959/upload",data,{
+          onUploadProgress:progressEvent=>{
+            console.log(progressEvent.loaded)
+          }
+        })
         .then(res=>{
           console.log(res.statusText)
         })
@@ -93,14 +121,14 @@ class DropZoneComp extends Component {
       }
     
       render() {
-          const maxSize = 1000000;
+          const maxSize = 5000000000;
         return (
           <Style>
             <Dropzone 
             className="drop"
             style={{}}
             onDrop={this.onDrop}
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg,image/jpg"
             minSize={0}
             maxSize={maxSize}
             multiple>

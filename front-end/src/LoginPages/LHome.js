@@ -3,6 +3,8 @@ import Dropzone from 'react-dropzone';
 import {Container,Row,Col,Card,Nav,Image} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
+import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
+
 const Style = styled.div`
 .drop{
    text-align:center;
@@ -21,6 +23,22 @@ const DropZoneContainer = styled.div`
   text-align:centr;
 `;
 
+class OverallData extends Component{
+  render(){
+      return(
+          <div>Overall data</div>
+      )
+  }
+}
+
+class CurrentData extends Component{
+  render(){
+      return(
+        <div>Current data</div>
+      )
+  }
+}
+
 export default class LHome extends Component{
   render()
   {
@@ -32,19 +50,24 @@ export default class LHome extends Component{
           <Row className="rowInfo">
           <Card border="dark" style={{width:'30em',height:'31em'}}>
             <Card.Header>
-              <Nav variant="tabs" defaultActiveKey='#first'>
-                <Nav.Item>
-                  <Nav.Link href='#first'>
+              <Nav variant="tabs" defaultActiveKey='1'>
+              <Nav.Item>
+                  <Nav.Link eventKey="1"><Link to="/LHome/first">
                     Overall Data
-                  </Nav.Link>
+                  </Link></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link href='#second'>
+                  <Nav.Link eventKey="2"><Link to="/LHome/second">
                     Current Plant Data
-                  </Nav.Link>
+                  </Link></Nav.Link>
                 </Nav.Item>
               </Nav>
             </Card.Header>
+            <Card.Body>
+            <Route path="/LHome/first" component={OverallData}/>
+            <Route path="/LHome/second" component={CurrentData}/>
+            </Card.Body>
+            
           </Card>
           </Row>
           
