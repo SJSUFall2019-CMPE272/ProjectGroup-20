@@ -55,7 +55,7 @@ export default class Home extends Component{
 
     data.append('file',acceptedFiles[0])
 
-    axios.post("http://173.193.106.54:32594/classify",data)
+    axios.post("/classify",data)
     .then(res=>{
       console.log(res.data)
       this.state.classification = res.data

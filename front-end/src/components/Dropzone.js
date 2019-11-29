@@ -13,11 +13,10 @@ class DropZoneComp extends Component {
   {
     super(props);
     this.state={
-      selectedfile:null
-    }
-    this.state = {
+      selectedfile:null,
       classification: null,
-      imageFile: null
+      imageFile: null,
+      imgSrc:null
     }
   }
   onDrop = (acceptedFiles) => {
@@ -27,8 +26,15 @@ class DropZoneComp extends Component {
     const data = new FormData()
     console.log(acceptedFiles[0])
     data.append('file',acceptedFiles[0])
-
-    axios.post("http://localhost:4000/classify",data)
+    const currentFile = acceptedFiles[0]
+    const reader = new FileReader()
+    reader.addEventListener("load",()=>{
+      this.setState({
+        imgSrc: reader.result
+      })
+    },false)
+    reader.readAsDataURL(currentFile)
+    axios.post("/classify",data)
     .then(res=>{
       this.state.classification = res.data
       this.forceUpdate()
@@ -40,8 +46,12 @@ class DropZoneComp extends Component {
   
     render() {
         const maxSize = 5000000000;
+        const {imgSrc} = this.state
       return (
         <Style>
+          {imgSrc!==null?
+            <img style={{width:'27em',height:'27em'}} src={imgSrc}/>
+            :''}
           <Dropzone 
           className="drop"
           style={{}}
