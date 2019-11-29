@@ -54,7 +54,6 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file',acceptedFiles[0])
-
     axios.post("/classify",data,{
       onUploadProgress:ProgressEvent=>{
         console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
@@ -109,7 +108,7 @@ export default class Home extends Component{
             
               {/* <div>Overall data</div> */}
             <div>Species: {splitted[0]}</div>
-            <div>Disease: {splitted[1]}{" "}{splitted[2]}</div>
+            <div>Disease: {splitted[1]}{" "}{splitted[2]}{" "}{splitted[3]}{" "}{splitted[4]}{" "}{splitted[5]}{" "}{splitted[6]}</div>
               
             {/* <Route path="/second">
             <div>Current Data</div>
