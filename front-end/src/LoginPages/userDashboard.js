@@ -48,7 +48,8 @@ class ImageComp extends Component{
             password: '',
             allImages: [],
             imageData:null,
-            imageClicked: false
+            imageClicked: false,
+            source: null
         }
     }
     componentDidMount(){
@@ -59,41 +60,83 @@ class ImageComp extends Component{
             headers: {"token": token}
         })
         .then(response=>{
+            console.log(response.data)
+
+            //remove username from response
+            var stringed = JSON.stringify(response.data)
+            var splitted = stringed.split("/").pop()
+            var final = splitted.replace('"]',"")
+            console.log(final)
+
+            var Url = '/upload/image/'+final
+            console.log(Url)
+            
+
             this.state.allImages = response.data
             this.forceUpdate()
+            return axios({
+                url: Url,
+                method: 'get',
+                responseType:'arraybuffer',
+                headers: {"token": token}
+            })
+        }).then(response=>{
+            console.log(response.data)
+            const base64 = btoa(
+                new Uint8Array(response.data).reduce(
+                  (data, byte) => data + String.fromCharCode(byte),
+                  '',
+                ),
+              );
+              this.setState({ source: "data:;base64," + base64 });
+              console.log(this.state.source)
         })
         .catch(err=>{
             console.log(err)
         })
     }
     handleImageClick(){
+        const token = myStorage.getItem("token")
+        console.log(this.state.allImages[0])
+        //remove username from response
+        var stringed = JSON.stringify(this.state.allImages[0])
+        var splitted = stringed.split("/").pop()
+        var final = splitted.replace('"',"")
+
+        const Data = new FormData()
+        Data.append('file',final)
+        console.log(Data)
         this.setState({
             imageClicked : true
         })
-        axios.post('/classify')
+        var Url = "/classify/" + final
+        console.log(Url)
+        axios({
+            url: Url,
+            method: 'get',
+            headers: {"token": token}
+        })
         .then(res=>{
-            this.state.imageData=res.data
+            var stringed = JSON.stringify(res.data.prediction.label)
+            var splitted = stringed.split("_")
+            console.log(splitted)
+            alert("Plant type="+splitted[0]+"\nDisease ="+splitted[1]+" "+splitted[1])
         })
         .catch(err=>{
             console.log(err)
+            
         })
     }
-
     componentWillUnmount(){}
     render(){
-        let imageViewData
-        let imageData = this.state.imageData
-        const imageClicked = this.state.imageClicked
-        if(imageClicked==true){
-            imageViewData = <div>{imageData}</div>
-        }
         return(
             <ListGroup>
                 {
                     this.state.allImages.map((name) => {
                         return( <div>
-                            <ListGroup.Item onClick={this.handleImageClick.bind(this)}>{name}</ListGroup.Item>
-                            {imageViewData}</div>
+                            <ListGroup.Item onClick={this.handleImageClick.bind(this)}><div>
+                                {name}
+                                <img src={this.state.source}/></div></ListGroup.Item></div>
                         )
                     })
                 }
@@ -102,41 +145,6 @@ class ImageComp extends Component{
     }
 }
 
-class UploadComp extends Component{
-    constructor(props){
-        super(props)
-        this.state={
-            name :'Ryan',
-            password: '',
-            imgSrc:null
-        }
-    }
-    componentDidMount(){
-        const token = myStorage.getItem("token")
-        axios({
-            url: '/upload/image/',
-            method: 'get',
-            headers: {"token": token}
-        })
-        .then(response=>{
-            console.log(response)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-    }
-
-    render(){
-        const {imgSrc} = this.state
-        return(
-            <div>{imgSrc!==null?
-                <img style={{width:'4em',height:'4em'}} src={imgSrc}/>
-                :''}
-                <DropZoneComp/>
-            </div>
-        )
-    }
-}
 
 export class Dashboard extends Component{
     constructor(props){
@@ -144,13 +152,15 @@ export class Dashboard extends Component{
         this.state={
             name :'Ryan',
             password: '',
-            loading: false
+            loading: false,
+            imgName:null
         }
     }
     handleClick(e){
         this.props.handleLogOut()
         this.props.history.push('/')
     }
+    
     render(){
         return(
             <Style>
@@ -207,13 +217,21 @@ export class Dashboard extends Component{
                                 minHeight: 280,
                                 }}
                             >
-                                <Route exact path="/UserDashboard/upload" component={UploadComp}>
-                                </Route>
+                                {<Route exact path="/UserDashboard/upload">
+                                <DropZoneComp/>
+                                </Route>}
+                                {/* <Route 
+                                    path={"/UserDashboard/upload"}
+                                    render = {props=>(<UploadComp {...props} imgName={this.state.imgName}/>)} 
+                                /> */}
                                 {/* <Route exact path="/UserDashboard/last">
                                     Last uploaded file
                                 </Route> */}
                                 {/* <Route exact path="/UserDashboard/all" component={AllFiles}/>  */}
-                                <Route exact path="/UserDashboard" component={ImageComp}/>
+                                <Route 
+                                    path={"/UserDashboard"}
+                                    render = {props=>(<ImageComp {...props} />)} 
+                                />
                                 <Route exact path="/UserDashboard/account">
                                     <div>
                                     {
