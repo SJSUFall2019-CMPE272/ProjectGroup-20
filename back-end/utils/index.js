@@ -49,7 +49,18 @@ const getS3Object = function (key) {
     })
   })
 }
-
+const deleteS3Object = function (key) {
+  console.log(key)
+  return new Promise((resolve, reject) => {
+    s3.deleteObject({ Bucket: process.env.aws_s3_bucket, Key: key }, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
 const uploadS3Object = function (key, obj) {
   return new Promise((resolve, reject) => {
     s3.putObject({ Bucket: process.env.aws_s3_bucket, Key: key, Body: obj }, (err, data) => {
@@ -109,3 +120,4 @@ exports.validateToken = validateToken
 exports.classify = classify
 exports.getS3Object = getS3Object
 exports.uploadS3Object = uploadS3Object
+exports.deleteS3Object = deleteS3Object
