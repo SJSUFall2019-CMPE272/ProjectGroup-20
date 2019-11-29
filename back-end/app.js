@@ -24,6 +24,7 @@ app.use('/upload', uploadRouter)
 app.use('/test', validateToken, testRouter)
 app.use('/auth', authRouter)
 app.use('/classify', classifyRouter)
+app.use(express.static(path.join(__dirname, 'public')))
 app.use('*', express.static(path.join(__dirname, 'public')))
 
 // TODO: to implement a protected route, use the validateToken middleware
