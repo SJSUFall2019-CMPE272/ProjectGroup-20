@@ -57,6 +57,7 @@ class AllFiles extends Component{
         })
         .then(response=>{
             this.state.allImages = response.data
+            this.forceUpdate()
         })
         .catch(err=>{
             console.log(err)
