@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import {Layout,Avatar,Menu,Icon,Breadcrumb} from 'antd'
-import {Button} from 'react-bootstrap'
+import {Button, ListGroup} from 'react-bootstrap'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
 import "antd/dist/antd.css";
@@ -9,6 +9,7 @@ import { SubMenu } from 'rc-menu'
 import axios from 'axios'
 import DropZoneComp from '../components/Dropzone'
 const {Header,Sider,Content,Footer} = Layout
+var myStorage = window.localStorage
 
 const Style = styled.div`
     .link{
@@ -44,21 +45,33 @@ class AllFiles extends Component{
         this.state={
             name :'Ryan',
             password: '',
+            allImages: []
         }
     }
     componentDidMount(){
-        axios.get('https://localhost:4000/upload/list')
+        const token = myStorage.getItem("token")
+        axios({
+            url: '/upload/list/',
+            method: 'get',
+            headers: {"token": token}
+        })
         .then(response=>{
-            console.log(response.data)
+            this.state.allImages = response.data
         })
         .catch(err=>{
             console.log(err)
-          })
+        })
     }
 
     render(){
         return(
-            <div>All uploaded files</div>
+            <ListGroup>
+                {
+                    this.state.allImages.map((name) => {
+                        return <ListGroup.Item>{name}</ListGroup.Item>
+                    })
+                }
+            </ListGroup>
         )
     }
 }
@@ -69,6 +82,7 @@ export class Dashboard extends Component{
         this.state={
             name :'Ryan',
             password: '',
+            loading: false
         }
     }
     handleClick(e){
@@ -87,9 +101,9 @@ export class Dashboard extends Component{
                     <Layout>
                         <Sider className="sider">
                             <Menu
-                                defaultSelectedKeys={['title']}
+                                defaultSelectedKeys={['Images']}
                                 mode="inline">
-                                <SubMenu
+                                {/* <SubMenu
                                     title={
                                         <span>
                                             <Icon type="file-image"/>
@@ -106,13 +120,13 @@ export class Dashboard extends Component{
                                             </Link>
                                         </Menu.Item>
                                     </Menu.ItemGroup>
-                                </SubMenu>
-                                <Menu.Item key='View'>
-                                    <Link to="/UserDashboard/view">View data
+                                </SubMenu> */}
+                                <Menu.Item key='Images'>
+                                    <Link to="/UserDashboard">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
-                                    <Link to="/UserDashboard/upload">Upload images
+                                    <Link to="/UserDashboard/upload">Upload
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='acc'>
@@ -131,15 +145,13 @@ export class Dashboard extends Component{
                                 }}
                             >
                                 <Route exact path="/UserDashboard/upload">
-                                    <DropZoneComp/>
+                                    <DropZoneComp />
                                 </Route>
-                                <Route exact path="/UserDashboard/last">
+                                {/* <Route exact path="/UserDashboard/last">
                                     Last uploaded file
-                                </Route>
-                                <Route exact path="/UserDashboard/all" component={AllFiles}/> 
-                                <Route exact path="/UserDashboard/view">
-                                    View data
-                                </Route>
+                                </Route> */}
+                                {/* <Route exact path="/UserDashboard/all" component={AllFiles}/>  */}
+                                <Route exact path="/UserDashboard" component={AllFiles}/>
                                 <Route exact path="/UserDashboard/account">
                                     <div>
                                     {

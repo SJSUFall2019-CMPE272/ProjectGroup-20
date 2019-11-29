@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import styled from 'styled-components'
 import axios from 'axios'
+var myStorage = window.localStorage
 
 const Style = styled.div``
 const DropZoneContainer = styled.div`
@@ -24,7 +25,6 @@ class DropZoneComp extends Component {
       imageFile: acceptedFiles[0]
     })
     const data = new FormData()
-    console.log(acceptedFiles[0])
     data.append('file',acceptedFiles[0])
     const currentFile = acceptedFiles[0]
     const reader = new FileReader()
@@ -34,10 +34,19 @@ class DropZoneComp extends Component {
       })
     },false)
     reader.readAsDataURL(currentFile)
-    axios.post("/classify",data)
-    .then(res=>{
-      this.state.classification = res.data
-      this.forceUpdate()
+    const token = myStorage.getItem("token")
+    axios.interceptors.request.use(function (config) {
+        let newConfig = config
+        newConfig.headers.token = token
+        return newConfig
+      }, function (error) {
+        console.log(error)
+        return
+      }
+    )
+    axios.post('/upload/save/', data)
+    .then(response=>{
+        console.log(response.data)
     })
     .catch(err=>{
       console.log(err)
