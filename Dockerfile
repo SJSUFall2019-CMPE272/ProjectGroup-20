@@ -6,7 +6,7 @@ RUN yarn install --silent --production=true
 COPY front-end .
 RUN yarn run build
 
-FROM node:10-alpine
+FROM node:10-slim
 
 ARG cloudant_username
 ENV cloudant_username=${cloudant_username}
