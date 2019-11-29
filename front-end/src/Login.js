@@ -157,7 +157,7 @@ export class Login extends React.Component{
                 <div className="text-center">
                     <p>
                     No account? Create and account 
-                    <NavLink to="sign-up"> here.</NavLink>
+                    <NavLink to="/sign-up"> here.</NavLink>
                     <span className="p-2"></span>
                     </p>
                 </div>

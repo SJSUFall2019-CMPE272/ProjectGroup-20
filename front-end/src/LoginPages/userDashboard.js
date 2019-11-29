@@ -56,10 +56,11 @@ class ImageComp extends Component{
         axios({
             url: '/upload/list/',
             method: 'get',
-            //headers: {"token": token}
+            headers: {"token": token}
         })
         .then(response=>{
             this.state.allImages = response.data
+            this.forceUpdate()
         })
         .catch(err=>{
             console.log(err)
