@@ -57,7 +57,6 @@ export default class Home extends Component{
 
     axios.post("/classify",data)
     .then(res=>{
-      console.log(res.data)
       this.state.classification = res.data
       this.forceUpdate()
     })
@@ -73,8 +72,11 @@ export default class Home extends Component{
     const maxSize = 5000000000;
     const {imgSrc} = this.state
     let classificationlabel;
+    let splitted = ""
     if (this.state.classification && this.state.classification.label) {
       classificationlabel = this.state.classification.label;
+      splitted = classificationlabel.match(/[A-Z][a-z]+/g)
+      console.log(splitted)
     }
     
     return(
@@ -102,7 +104,8 @@ export default class Home extends Component{
             <Card.Body>
             
               {/* <div>Overall data</div> */}
-              {classificationlabel}
+            <div>Species ={splitted}</div>
+            <div>Disease ={splitted[2]}{" "}{splitted[3]}</div>
               
             {/* <Route path="/second">
             <div>Current Data</div>
