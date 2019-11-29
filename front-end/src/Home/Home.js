@@ -33,6 +33,10 @@ export default class Home extends Component{
       id: '',
       label: ''
     })
+    this.state = {
+      classification: null,
+      imageFile: null
+    }
   }
 
   handleFirst(){
@@ -46,11 +50,35 @@ export default class Home extends Component{
       })
     console.log("hi")
   }
+
+  onDrop = (acceptedFiles) => {
+    this.setState({
+      imageFile: acceptedFiles[0]
+    })
+    const data = new FormData()
+    console.log(acceptedFiles[0])
+    data.append('file',acceptedFiles[0])
+
+    axios.post("/classify",data)
+    .then(res=>{
+      this.state.classification = res.data
+      this.forceUpdate()
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
  
     
 
   render()
   {
+    const maxSize = 5000000000;
+    let classificationlabel;
+    if (this.state.classification && this.state.classification.label) {
+      classificationlabel = this.state.classification.label;
+    }
+    
     return(
           <Style>
         <Router>
@@ -62,123 +90,65 @@ export default class Home extends Component{
             <Card.Header>
               <Nav variant="tabs" defaultActiveKey="1">
                 <Nav.Item>
-                  <Nav.Link onSelect={this.handleFirst.bind(this)} eventKey="1"><Link to="/first">
+                  <Nav.Link ><Link to="/">
                     Overall Data
                   </Link></Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                {/* <Nav.Item>
                   <Nav.Link eventKey="2"><Link to="/second">
                     Current Plant Data
                   </Link></Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
               </Nav>
             </Card.Header>
             <Card.Body>
-            <Route path="/first">
-              <div>Overall data</div>
+            <Route path="/">
+              {/* <div>Overall data</div> */}
+              {classificationlabel}
               </Route>
-            <Route path="/second">
+            {/* <Route path="/second">
             <div>Current Data</div>
-              </Route>
+              </Route> */}
             </Card.Body>
           </Card>
           </Row>
-          
         </Col>
         <Col>
         <Card border="dark" style={{width:'30em',height:'31em',marginTop:'1em'}} body>
-        <DropZoneComp />
-        </Card>
-        </Col>
-        </Row>
-        
-      </Container>
-        </Router>
-        
-      </Style>
-      
-      
-      
-      
-    
-    )
-  }
-}
-
-class DropZoneComp extends Component {
-    constructor(props)
-    {
-      super(props);
-      this.state={
-        selectedfile:null
-      }
-    }
-    onDrop = (acceptedFiles) => {
-        const data = new FormData()
-        console.log(acceptedFiles[0])
-        data.append('file',acceptedFiles[0])
-        axios.post("http://localhost:4000/upload",data,{
-          onUploadProgress:progressEvent=>{
-            console.log(progressEvent.loaded)
-          }
-        })
-        .then(res=>{
-          console.log(res.statusText)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-
-        axios.post("http://localhost:4000/classify",data)
-        .then(res=>{
-          console.log(res.statusText)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-      }
-    
-      render() {
-          const maxSize = 5000000000;
-        return (
-          <Style>
-            <Dropzone 
+        <Dropzone 
             className="drop"
             style={{}}
-            onDrop={this.onDrop}
+            onDrop={this.onDrop.bind(this)}
             accept="image/png, image/jpeg,image/jpg"
             minSize={0}
             maxSize={maxSize}
             multiple>
               {({getRootProps, getInputProps, isDragActive, isDragReject, rejectedFiles}) => {
-            const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
-            return (
-              
+                const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
+                return (
                   <div className="drop"{...getRootProps()}>
-                    <DropZoneContainer>
-              <input {...getInputProps()} />
-              {!isDragActive && 'Click here to drop the baby!'}
-              {isDragActive && isDragReject && "I was kidding you psycho, but ok i guess"}
-              {isDragActive && !isDragReject && "File type not accepted, sorry!"}
-              {isFileTooLarge && (
-                <div className="text-danger mt-2">
-                  File is too large.
-                </div>
-              )}
-              </DropZoneContainer>
-            </div>
-              
-            
-          )}
-        }
+                  <DropZoneContainer>
+                  <input {...getInputProps()} />
+                  {!isDragActive && 'Click here to drop the baby!'}
+                  {isDragActive && isDragReject && "I was kidding you psycho, but ok i guess"}
+                  {isDragActive && !isDragReject && "File type not accepted, sorry!"}
+                  {isFileTooLarge && (
+                    <div className="text-danger mt-2">
+                      File is too large.
+                    </div>
+                  )}
+                  </DropZoneContainer>
+                  </div>
+                )}
+              }
             </Dropzone>
-         
-          </Style>
-          
-        );
-      }
+        </Card>
+        </Col>
+        </Row>
+        
+        </Container>
+        </Router>
+      </Style>
+    )
+  }
 }
-
-
-    
-    
