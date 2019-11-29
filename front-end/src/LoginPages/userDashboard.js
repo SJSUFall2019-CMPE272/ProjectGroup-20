@@ -120,7 +120,7 @@ class ImageComp extends Component{
             var stringed = JSON.stringify(res.data.prediction.label)
             var splitted = stringed.split("_")
             console.log(splitted)
-            alert("Plant type="+splitted[0]+"\nDisease ="+splitted[1]+" "+splitted[1])
+            alert("Plant type="+splitted[0]+"\nDisease ="+splitted[1]+" "+splitted[2]+" "+splitted[3]+" "+splitted[4]+" "+splitted[5]+" "+splitted[6])
         })
         .catch(err=>{
             console.log(err)
