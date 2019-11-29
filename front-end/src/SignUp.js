@@ -43,7 +43,7 @@ export class SignUp extends React.Component{
     }
     
     handleRClick= e =>{
-        axios.post("http://173.193.106.54:32594/auth/register",{
+        axios.post("/auth/register",{
                 username:this.state.username,
                 email: this.state.email,
                 password:this.state.password

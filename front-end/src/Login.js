@@ -119,10 +119,10 @@ export class Login extends React.Component{
                     <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Username</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                     placeholder="Username/Email"
+                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     onChange={this.handleChange.bind(this)}
