@@ -43,15 +43,15 @@ export class SignUp extends React.Component{
     }
     
     handleRClick= e =>{
-        axios.post("/auth/register",{
+        axios.post("http://173.193.106.54:32594/auth/register",{
                 username:this.state.username,
                 email: this.state.email,
                 password:this.state.password
             }).then(response=>{
                 console.log(response)
-                if(this.response.username===this.state.username){
-                    this.props.handleLogin(response.username)
-                    this.props.history.push("/Login")
+                if(response.data===this.state.username){
+                    this.props.handleLogin(response.data)
+                    this.props.history.push("/login")
                 }
             }).catch(error=>{
                 console.log(error)
