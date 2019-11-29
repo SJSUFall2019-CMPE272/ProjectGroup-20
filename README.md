@@ -16,14 +16,12 @@ Agriculture in the United States is a major driver of economic growth, accountin
 # Technology Stack
 
 [IBM Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/)<br />
-[AWS Lambda](https://aws.amazon.com/lambda/)<br />
+[Amazon Cognito](https://aws.amazon.com/cognito/)<br />
 [Amazon S3](https://aws.amazon.com/s3/)<br />
-[Amazon DynamoDB](https://aws.amazon.com/dynamodb/)<br />
 [React](https://reactjs.org/)<br />
 [Node.js](https://nodejs.org/)<br />
 [Kubernetes](https://kubernetes.io/)<br />
 [Docker](https://www.docker.com/)<br />
-[Jenkins](https://jenkins.io/)
 
 # Design Thinking
 The Web app allows family farms to use computer vision to measure crop health and analyze historical trends with ease.
