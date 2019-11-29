@@ -6,7 +6,7 @@ var myStorage = window.localStorage
 
 const Style = styled.div``
 const DropZoneContainer = styled.div`
-  height:31em;
+  
   text-align:center;
 `;
 class DropZoneComp extends Component {
@@ -44,7 +44,7 @@ class DropZoneComp extends Component {
         return
       }
     )
-    axios.post('/upload/save/', data)
+    axios.post('/classify', data)
     .then(response=>{
         console.log(response.data)
     })
