@@ -4,6 +4,8 @@ const tf = require('@tensorflow/tfjs-node')
 const tfds = require('@tensorflow/tfjs-data')
 const jpeg = require('jpeg-js')
 const multerConfig = require('../config/multer')
+const getS3Object = require('../utils/index').getS3Object
+const validateToken = require('../utils/index').validateToken
 
 const modelURL = 'https://plantdiseasemodel.s3-us-west-1.amazonaws.com/model.json'
 
@@ -24,12 +26,26 @@ const classes = ['Potato___Early_blight',
   'Tomato__Tomato_YellowLeaf__Curl_Virus']
 
 router.post('/', multerConfig.upload, function (req, res) {
-  prediction = predict(req.file).then(
+  prediction = predict(req.file.buffer).then(
     prediction => {
       console.log(prediction)
       res.status(200).send(prediction)
     }
   )
+})
+
+router.get('/:keyimg', validateToken, function (req, res) {
+  const s3Name = res.locals.auth.username + '/' + req.params.keyimg
+  getS3Object(s3Name).then((data) => {
+    predict(data.Body).then(
+      prediction => {
+        console.log(prediction)
+        res.status(200).send({ prediction: prediction, data: data.Body })
+      }
+    )
+  }).catch(err => {
+    res.status(400).send(err)
+  })
 })
 
 const predict = async function (data) {
@@ -40,7 +56,7 @@ const predict = async function (data) {
   // TODO - convert multer image to tensor and process
   // Using placeholder tensor for now
   console.log(data)
-  const processedImg = processImage(data.buffer) // for example
+  const processedImg = processImage(data) // for example
   const logits = model.predict(processedImg)
   const prediction = logits.as1D().argMax()
   const classID = (await prediction.data())[0]
