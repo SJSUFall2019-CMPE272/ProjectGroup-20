@@ -44,7 +44,7 @@ class DropZoneComp extends Component {
         return
       }
     )
-    axios.post('/classify', data)
+    axios.post('/upload/save/', data)
     .then(response=>{
         console.log(response.data)
     })

@@ -108,8 +108,8 @@ export default class Home extends Component{
             <Card.Body>
             
               {/* <div>Overall data</div> */}
-            <div>Species ={splitted[0]}{" "}{splitted[1]}</div>
-            <div>Disease ={splitted[2]}{" "}{splitted[3]}</div>
+            <div>Species: {splitted[0]}</div>
+            <div>Disease: {splitted[1]}{" "}{splitted[2]}</div>
               
             {/* <Route path="/second">
             <div>Current Data</div>
