@@ -55,7 +55,11 @@ export default class Home extends Component{
 
     data.append('file',acceptedFiles[0])
 
-    axios.post("/classify",data)
+    axios.post("/classify",data,{
+      onUploadProgress:ProgressEvent=>{
+        console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
+      }
+    })
     .then(res=>{
       this.state.classification = res.data
       this.forceUpdate()
@@ -75,7 +79,7 @@ export default class Home extends Component{
     let splitted = ""
     if (this.state.classification && this.state.classification.label) {
       classificationlabel = this.state.classification.label;
-      splitted = classificationlabel.match(/[A-Z][a-z]+/g)
+      splitted = classificationlabel.split('_')
       console.log(splitted)
     }
     
@@ -133,8 +137,8 @@ export default class Home extends Component{
                   <div className="drop"{...getRootProps()}>
                   <DropZoneContainer>
                   <input {...getInputProps()} />
-                  {!isDragActive && 'Click here to drop the baby!'}
-                  {isDragActive && isDragReject && "I was kidding you psycho, but ok i guess"}
+                  {!isDragActive && 'Click here or drop images to upload'}
+                  {isDragActive && isDragReject && "Almost there"}
                   {isDragActive && !isDragReject && "File type not accepted, sorry!"}
                   {isFileTooLarge && (
                     <div className="text-danger mt-2">

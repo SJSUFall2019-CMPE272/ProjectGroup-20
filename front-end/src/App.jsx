@@ -17,7 +17,7 @@ import {LContact} from './LoginPages/LContact'
 import {Dashboard} from './LoginPages/userDashboard'
 import {Confirm} from './components/Confirmation'
 import axios from 'axios'
-
+var myStorage = window.localStorage
 class App extends Component {
   constructor(){
     super()
@@ -66,6 +66,7 @@ class App extends Component {
   }
   //changes navbar according to whether user is logged in or not (remove dashboard from nav bar)
   handleLogOut(){
+    myStorage.clear()
     this.setState({
       loggedIn: false
     })

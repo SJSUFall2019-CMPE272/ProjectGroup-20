@@ -6,7 +6,7 @@ var myStorage = window.localStorage
 
 const Style = styled.div``
 const DropZoneContainer = styled.div`
-  height:31em;
+  
   text-align:center;
 `;
 class DropZoneComp extends Component {

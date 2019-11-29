@@ -58,9 +58,7 @@ export class Login extends React.Component{
                     this.forceUpdate()
                     return
                 }
-                myStorage.setItem("string","hi")
-                var test = myStorage.getItem("string")
-                this.props.handleLogin(test)
+                this.props.handleLogin()
             })
     }
     handleClick(e){
