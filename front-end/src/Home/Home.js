@@ -20,7 +20,7 @@ const Style = styled.div`
 `;
 const DropZoneContainer = styled.div`
   height:31em;
-  text-align:centr;
+  text-align:center;
 `;
 
 
@@ -110,7 +110,8 @@ class DropZoneComp extends Component {
     {
       super(props);
       this.state={
-        selectedfile:null
+        selectedfile:null,
+        imgSrc:null
       }
     }
     onDrop = (acceptedFiles) => {
@@ -131,8 +132,14 @@ class DropZoneComp extends Component {
     
       render() {
           const maxSize = 5000000000;
+          const {imgSrc} = this.state
         return (
           <Style>
+            {imgSrc !== null ?
+            <div>
+              {imgSrc}
+              <img src={imgSrc}/>
+            </div> :''}
             <Dropzone 
             className="drop"
             style={{}}

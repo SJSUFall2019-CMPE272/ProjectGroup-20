@@ -51,7 +51,7 @@ export class SignUp extends React.Component{
                 console.log(response)
                 if(this.response.username===this.state.username){
                     this.props.handleLogin(response.username)
-                    this.props.history.push("/Confirmation")
+                    this.props.history.push("/Login")
                 }
             }).catch(error=>{
                 console.log(error)

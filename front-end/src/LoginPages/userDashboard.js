@@ -7,6 +7,7 @@ import Title from 'antd/lib/typography/Title'
 import "antd/dist/antd.css";
 import { SubMenu } from 'rc-menu'
 import Axios from 'axios'
+import DropZoneComp from '../components/Dropzone'
 const {Header,Sider,Content,Footer} = Layout
 
 const Style = styled.div`
@@ -85,6 +86,10 @@ export class Dashboard extends Component{
                                     <Link to="/UserDashboard/view">View data
                                     </Link>
                                 </Menu.Item>
+                                <Menu.Item key='upload'>
+                                    <Link to="/UserDashboard/upload">Upload images
+                                    </Link>
+                                </Menu.Item>
                                 <Menu.Item key='acc'>
                                     <Link to="/UserDashboard/account">Account Info
                                     </Link>
@@ -100,6 +105,9 @@ export class Dashboard extends Component{
                                 minHeight: 280,
                                 }}
                             >
+                                <Route exact path="/UserDashboard/upload">
+                                    <DropZoneComp/>
+                                </Route>
                                 <Route exact path="/UserDashboard/last">
                                     Last uploaded file
                                 </Route>
@@ -113,10 +121,6 @@ export class Dashboard extends Component{
                                     <div>
                                     {
                                         this.state.name
-                                        //Axios.get("http://localhost:4000/registrations")
-                                         //   .then(response=>{
-                                                
-                                         //   })
                                     }
                                     </div>
                                 </Route>
