@@ -23,6 +23,9 @@ const Style = styled.div`
     right:-1;
     z-index:-1;
 }
+.h1{
+    color: white
+}
 `;
 
 export const Jumbotron = () => (
@@ -30,7 +33,7 @@ export const Jumbotron = () => (
         <Jumbo fluid className='jumbo'>
             <div className = 'overlay'></div>
             <Container>
-                <h1>Plant disease detector</h1>
+                <h1 className="h1">Plant disease detector</h1>
                 <p>For your agricultural disease detection needs.</p>
             </Container>
         </Jumbo>

@@ -19,8 +19,12 @@ const Style = styled.div`
 }
 .input-group{
     justify-content:center;
-}.p{
+}
+.p{
     text-align:center;
+}
+.text{
+    width: 10em;
 }
 `;
 
@@ -29,17 +33,31 @@ export class SignUp extends React.Component{
         super(props)
         this.state={
             username: '',
+            email:'',
             password: '',
+            password_confirmation: '',
+            registration_error:''
         }
         this.handleRClick = this.handleRClick.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
     
     handleRClick= e =>{
-        e.preventDefault()
-        window.axios.post(`http://localhost:4000`,(this.state.username,this.state.password))
-            .then(response=>{
+        axios.post("http://localhost:4000/auth/register",{
+                username:this.state.username,
+                email: this.state.email,
+                password:this.state.password
+            }).then(response=>{
                 console.log(response)
+                if(this.response.username===this.state.username){
+                    this.props.handleLogin(response.username)
+                    this.props.history.push("/Confirmation")
+                }
+            }).catch(error=>{
+                console.log(error)
             })
+        e.preventDefault()
+
     }
     handleChange (e){
         let name = e.target.name
@@ -51,16 +69,17 @@ export class SignUp extends React.Component{
     }
     render(){
         return(
+            <Style>
             <Form className="hi">
                 <p className="p">Register</p>
                 <FormGroup>
                     <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text   id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Username</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                     placeholder="Username/Email"
+                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     onChange={this.handleChange.bind(this)}
@@ -73,10 +92,30 @@ export class SignUp extends React.Component{
                     
                 </FormGroup>
                 <FormGroup>
+                    <div>
+                    <InputGroup>
+                    <InputGroup.Prepend>
+                    <InputGroup.Text className="text" id="inputGroup-sizing-default">Email</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                     placeholder="Email"
+                    aria-label="Email"
+                    aria-describedby="basic-addon1"
+                    onChange={this.handleChange.bind(this)}
+                    name="email" 
+                    value={this.state.email}
+                    onChange={this.handleChange.bind(this)}
+                    />
+                    </InputGroup>
+                    
+                    </div>
+                    
+                </FormGroup>
+                <FormGroup>
                 <div>
                     <InputGroup>
                     <InputGroup.Prepend>
-                    <InputGroup.Text name="password" id="inputGroup-sizing-default">Password</InputGroup.Text>
+                    <InputGroup.Text className="text" name="password" id="inputGroup-sizing-default">Password</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                     type="password"
@@ -85,6 +124,25 @@ export class SignUp extends React.Component{
                     aria-describedby="basic-addon1"
                     name="password" 
                     value={this.state.password}
+                    onChange={this.handleChange.bind(this)}
+                    />
+                    </InputGroup>
+                    
+                    </div>
+                </FormGroup>
+                <FormGroup>
+                <div>
+                    <InputGroup>
+                    <InputGroup.Prepend>
+                    <InputGroup.Text className="text" name="password" id="inputGroup-sizing-default">Confirm Password</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                    type="password"
+                     placeholder="Confirm Password"
+                    aria-label="Password"
+                    aria-describedby="basic-addon1"
+                    name="password_confirmation" 
+                    value={this.state.password_confirmation}
                     onChange={this.handleChange.bind(this)}
                     />
                     </InputGroup>
@@ -100,7 +158,7 @@ export class SignUp extends React.Component{
                     </p>
                 </div>
             </Form>
-
+            </Style>
         )
     }
 }
