@@ -15,22 +15,28 @@ class DropZoneComp extends Component {
     this.state={
       selectedfile:null
     }
+    this.state = {
+      classification: null,
+      imageFile: null
+    }
   }
   onDrop = (acceptedFiles) => {
-      const data = new FormData()
-      data.append('file',acceptedFiles[0])
-      axios.post("http://localhost:4000/upload",data,{
-        onUploadProgress:progressEvent=>{
-          console.log(progressEvent.loaded)
-        }
-      })
-      .then(res=>{
-        console.log(res.statusText)
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-    }
+    this.setState({
+      imageFile: acceptedFiles[0]
+    })
+    const data = new FormData()
+    console.log(acceptedFiles[0])
+    data.append('file',acceptedFiles[0])
+
+    axios.post("http://localhost:4000/classify",data)
+    .then(res=>{
+      this.state.classification = res.data
+      this.forceUpdate()
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
   
     render() {
         const maxSize = 5000000000;

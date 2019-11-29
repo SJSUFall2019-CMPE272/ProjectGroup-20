@@ -6,7 +6,7 @@ import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
 import "antd/dist/antd.css";
 import { SubMenu } from 'rc-menu'
-import Axios from 'axios'
+import axios from 'axios'
 import DropZoneComp from '../components/Dropzone'
 const {Header,Sider,Content,Footer} = Layout
 
@@ -37,6 +37,31 @@ const Style = styled.div`
         padding:1em
     }
 `;
+
+class AllFiles extends Component{
+    constructor(props){
+        super(props)
+        this.state={
+            name :'Ryan',
+            password: '',
+        }
+    }
+    componentDidMount(){
+        axios.get('https://localhost:4000/upload/list')
+        .then(response=>{
+            console.log(response.data)
+        })
+        .catch(err=>{
+            console.log(err)
+          })
+    }
+
+    render(){
+        return(
+            <div>All uploaded files</div>
+        )
+    }
+}
 
 export class Dashboard extends Component{
     constructor(props){
@@ -111,9 +136,7 @@ export class Dashboard extends Component{
                                 <Route exact path="/UserDashboard/last">
                                     Last uploaded file
                                 </Route>
-                                <Route exact path="/UserDashboard/all">
-                                    All uploaded files
-                                </Route>
+                                <Route exact path="/UserDashboard/all" component={AllFiles}/> 
                                 <Route exact path="/UserDashboard/view">
                                     View data
                                 </Route>
