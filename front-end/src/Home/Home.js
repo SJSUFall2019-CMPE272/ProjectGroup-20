@@ -4,7 +4,7 @@ import {Container,Row,Col,Card,Nav,Image,ProgressBar} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
-
+import plantImage from '../assets/plantb.jpg'
 const Style = styled.div`
 .drop{
    text-align:center;
@@ -20,7 +20,7 @@ const Style = styled.div`
 `;
 const DropZoneContainer = styled.div`
   height:31em;
-  text-align:centr;
+  text-align:center;
 `;
 
 
@@ -29,26 +29,11 @@ const DropZoneContainer = styled.div`
 export default class Home extends Component{
   constructor(props){
     super(props)
-    this.setState({
-      id: '',
-      label: ''
-    })
     this.state = {
       classification: null,
-      imageFile: null
+      imageFile: null,
+      imgSrc:null
     }
-  }
-
-  handleFirst(){
-    axios.get('http://localhost:4000/upload')
-      .then(response=>{
-        response.data.Id=this.state.id
-        response.data.Label=this.state.label
-      })
-      .catch(error=>{
-        console.log(error)
-      })
-    console.log("hi")
   }
 
   onDrop = (acceptedFiles) => {
@@ -57,10 +42,22 @@ export default class Home extends Component{
     })
     const data = new FormData()
     console.log(acceptedFiles[0])
+    //preview image
+    const currentFile = acceptedFiles[0]
+    const reader = new FileReader()
+    reader.addEventListener("load",()=>{
+      console.log(reader.result)
+      this.setState({
+        imgSrc: reader.result
+      })
+    },false)
+    reader.readAsDataURL(currentFile)
+
     data.append('file',acceptedFiles[0])
 
     axios.post("/classify",data)
     .then(res=>{
+      console.log(res.data)
       this.state.classification = res.data
       this.forceUpdate()
     })
@@ -74,6 +71,7 @@ export default class Home extends Component{
   render()
   {
     const maxSize = 5000000000;
+    const {imgSrc} = this.state
     let classificationlabel;
     if (this.state.classification && this.state.classification.label) {
       classificationlabel = this.state.classification.label;
@@ -102,10 +100,10 @@ export default class Home extends Component{
               </Nav>
             </Card.Header>
             <Card.Body>
-            <Route path="/">
+            
               {/* <div>Overall data</div> */}
               {classificationlabel}
-              </Route>
+              
             {/* <Route path="/second">
             <div>Current Data</div>
               </Route> */}
@@ -115,6 +113,9 @@ export default class Home extends Component{
         </Col>
         <Col>
         <Card border="dark" style={{width:'30em',height:'31em',marginTop:'1em'}} body>
+          {imgSrc!==null?
+            <img style={{width:'27em',height:'27em'}} src={imgSrc}/>
+            :''}
         <Dropzone 
             className="drop"
             style={{}}
