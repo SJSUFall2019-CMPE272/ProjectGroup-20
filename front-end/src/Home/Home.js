@@ -54,13 +54,15 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file',acceptedFiles[0])
-    axios.post("/classify",data,{
+    axios.post("http://localhost:3000/upload",data,{
       onUploadProgress:ProgressEvent=>{
         console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
       }
     })
     .then(res=>{
+      console.log("response")
       this.state.classification = res.data
+      console.log(res.data)
       this.forceUpdate()
     })
     .catch(err=>{
