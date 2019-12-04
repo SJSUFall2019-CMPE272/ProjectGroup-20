@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import plantImage from '../assets/plantb.jpg'
+import { DatePicker, message } from 'antd';
+
 const Style = styled.div`
 .drop{
    text-align:center;
@@ -31,8 +33,8 @@ export default class Home extends Component{
     super(props)
     this.state = {
       classification: {
-        species: [{ class: "" }],
-        disease: [{ class: "" }]
+        species: [{ class: "" , score: 0}],
+        disease: [{ class: "" , score: 0}]
       },
       imageFile: null,
       imgSrc:null
@@ -57,17 +59,14 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file',acceptedFiles[0])
-    axios.post("http://localhost:3000/upload",data,{
+    axios.post("/upload",data,{
       onUploadProgress:ProgressEvent=>{
         console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
       }
     })
     .then(res=>{
-      console.log(res.data.images[0].classifiers)
-      this.state.classification = {
-        species: res.data.images[0].classifiers[0].classes,
-        disease: res.data.images[0].classifiers[1].classes.length == 0 ? [{class: "healthy", score: 1}] : res.data.images[0].classifiers[1].classes
-      }
+      console.log(res.data)
+      this.state.classification = res.data
       console.log(this.state.classification)
       this.forceUpdate()
     })
@@ -82,13 +81,15 @@ export default class Home extends Component{
   {
     const maxSize = 5000000000;
     const {imgSrc} = this.state
-    let species = this.state.classification.species[0].class
-    let disease = this.state.classification.disease[0].class
+    const species = this.state.classification.species[0].class
+    const disease = this.state.classification.disease.length == 0 ? "healthy" : this.state.classification.disease[0].class
+    console.log(species)
     
     return(
-          <Style>
+          // <Style>
         <Router>
         <Container>
+
         <Row>
         <Col>
           <Row className="rowInfo">
@@ -158,7 +159,7 @@ export default class Home extends Component{
         
         </Container>
         </Router>
-      </Style>
+      // </Style>
     )
   }
 }

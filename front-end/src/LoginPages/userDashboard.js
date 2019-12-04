@@ -97,9 +97,9 @@ class ImageComp extends Component{
     }
     handleImageClick(){
         const token = myStorage.getItem("token")
-        console.log(this.state.allImages[0])
+        console.log(this.state.allImages[3])
         //remove username from response
-        var stringed = JSON.stringify(this.state.allImages[0])
+        var stringed = JSON.stringify(this.state.allImages[3])
         var splitted = stringed.split("/").pop()
         var final = splitted.replace('"',"")
 
@@ -117,10 +117,11 @@ class ImageComp extends Component{
             headers: {"token": token}
         })
         .then(res=>{
-            var stringed = JSON.stringify(res.data.prediction.label)
-            var splitted = stringed.split("_")
-            console.log(splitted)
-            alert("Plant type="+splitted[0]+"\nDisease ="+splitted[1]+" "+splitted[2]+" "+splitted[3]+" "+splitted[4]+" "+splitted[5]+" "+splitted[6])
+            var species = res.data.classification.species[0].class
+            var disease = res.data.classification.disease.length == 0 ? "healthy" : res.data.classification.disease[0].class
+
+            console.log(species)
+            alert("Plant type="+ species +"\nDisease ="+disease)
         })
         .catch(err=>{
             console.log(err)
@@ -163,7 +164,9 @@ export class Dashboard extends Component{
     
     render(){
         return(
-            <Style>
+            // <Style>
+            <div>
+                
                 <Router>
                 <div className="container">
                 <Layout>
@@ -179,20 +182,20 @@ export class Dashboard extends Component{
                                 {/* <SubMenu
                                     title={
                                         <span>
-                                            <Icon type="file-image"/>
-                                            <span>Uploaded files</span>
+                                        <Icon type="file-image"/>
+                                        <span>Uploaded files</span>
                                         </span>
                                     }>
                                     <Menu.ItemGroup key='files' title="Files">
-                                        <Menu.Item key='Last'>
+                                    <Menu.Item key='Last'>
                                             <Link to="/UserDashboard/last">Last uploaded files
                                             </Link>
                                         </Menu.Item>
                                         <Menu.Item key='All'>
                                             <Link to="/UserDashboard/all">All uploaded files
                                             </Link>
-                                        </Menu.Item>
-                                    </Menu.ItemGroup>
+                                            </Menu.Item>
+                                            </Menu.ItemGroup>
                                 </SubMenu> */}
                                 <Menu.Item key='Images'>
                                     <Link to="/UserDashboard">Images
@@ -211,12 +214,12 @@ export class Dashboard extends Component{
                         <Layout style={{ padding: '0 24px 24px' }}>
                             <Content
                                 style={{
-                                background: '#fff',
-                                padding: 24,
-                                margin: 0,
-                                minHeight: 280,
+                                    background: '#fff',
+                                    padding: 24,
+                                    margin: 0,
+                                    minHeight: 280,
                                 }}
-                            >
+                                >
                                 {<Route exact path="/UserDashboard/upload">
                                 <DropZoneComp/>
                                 </Route>}
@@ -231,7 +234,7 @@ export class Dashboard extends Component{
                                 <Route 
                                     path={"/UserDashboard"}
                                     render = {props=>(<ImageComp {...props} />)} 
-                                />
+                                    />
                                 <Route exact path="/UserDashboard/account">
                                     <div>
                                     {
@@ -248,9 +251,10 @@ export class Dashboard extends Component{
                     <Button onClick={this.handleClick.bind(this)} className="btn-dark btn-block"><Link to="/" className="link" >Log out</Link></Button> 
                 </div>
                 </Router>
-            </Style>
+                </div>
+            // </Style>
            
-        )
+           )
     }
 }
     
