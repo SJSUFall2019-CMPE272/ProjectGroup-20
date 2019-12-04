@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import plantImage from '../assets/plantb.jpg'
+import { DatePicker, message } from 'antd';
+
 const Style = styled.div`
 .drop{
    text-align:center;
@@ -30,7 +32,10 @@ export default class Home extends Component{
   constructor(props){
     super(props)
     this.state = {
-      classification: null,
+      classification: {
+        species: [{ class: "" , score: 0}],
+        disease: [{ class: "" , score: 0}]
+      },
       imageFile: null,
       imgSrc:null
     }
@@ -54,13 +59,15 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file',acceptedFiles[0])
-    axios.post("/classify",data,{
+    axios.post("/upload",data,{
       onUploadProgress:ProgressEvent=>{
         console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
       }
     })
     .then(res=>{
+      console.log(res.data)
       this.state.classification = res.data
+      console.log(this.state.classification)
       this.forceUpdate()
     })
     .catch(err=>{
@@ -74,18 +81,15 @@ export default class Home extends Component{
   {
     const maxSize = 5000000000;
     const {imgSrc} = this.state
-    let classificationlabel;
-    let splitted = ""
-    if (this.state.classification && this.state.classification.label) {
-      classificationlabel = this.state.classification.label;
-      splitted = classificationlabel.split('_')
-      console.log(splitted)
-    }
+    const species = this.state.classification.species[0].class
+    const disease = this.state.classification.disease.length == 0 ? "healthy" : this.state.classification.disease[0].class
+    console.log(species)
     
     return(
-          <Style>
+          // <Style>
         <Router>
         <Container>
+
         <Row>
         <Col>
           <Row className="rowInfo">
@@ -107,8 +111,8 @@ export default class Home extends Component{
             <Card.Body>
             
               {/* <div>Overall data</div> */}
-            <div>Species: {splitted[0]}</div>
-            <div>Disease: {splitted[1]}{" "}{splitted[2]}{" "}{splitted[3]}{" "}{splitted[4]}{" "}{splitted[5]}{" "}{splitted[6]}</div>
+            <div>Species: {species}</div>
+            <div>Disease: {disease}</div>
               
             {/* <Route path="/second">
             <div>Current Data</div>
@@ -155,7 +159,7 @@ export default class Home extends Component{
         
         </Container>
         </Router>
-      </Style>
+      // </Style>
     )
   }
 }

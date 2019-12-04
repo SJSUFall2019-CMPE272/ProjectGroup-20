@@ -41,7 +41,7 @@ export class Login extends React.Component{
         this.handleChange = this.handleChange.bind(this)
     }
     signinRequest() {
-        axios.post("/auth/signin",{
+        axios.post("http://localhost:3000/auth/signin",{
                 username:this.state.username,
                 password:this.state.password
             }).then(response=>{
@@ -63,7 +63,7 @@ export class Login extends React.Component{
     }
     handleClick(e){
         if (this.state.confirmationNeeded) {
-            axios.post("/auth/confirm",{
+            axios.post("http://localhost:3000/auth/confirm",{
                     username:this.state.username,
                     confirmationCode:this.state.confirmationCode
                 }).then(response=>{

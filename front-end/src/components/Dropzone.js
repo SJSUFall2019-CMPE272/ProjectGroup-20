@@ -57,7 +57,9 @@ class DropZoneComp extends Component {
         const maxSize = 5000000000;
         const {imgSrc} = this.state
       return (
-        <Style>
+        // <Style>
+        <div>
+
           {imgSrc!==null?
             <img style={{width:'27em',height:'27em'}} src={imgSrc}/>
             :''}
@@ -88,11 +90,12 @@ class DropZoneComp extends Component {
           </div>
             
           
-        )}
-      }
+            )}
+          }
           </Dropzone>
        
-        </Style>
+          </div>
+        // </Style>
         
       );
     }

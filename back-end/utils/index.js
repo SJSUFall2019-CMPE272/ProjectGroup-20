@@ -15,12 +15,20 @@ const classifierIds = process.env.classifier_ids ? process.env.classifier_ids.sp
 
 const classify = function (imageBuffer) {
   return new Promise(function (resolve, reject) {
+    console.log(classifierIds)
     visualRecognition.classify({
       imagesFile: imageBuffer,
-      classifier_ids: classifierIds
+      owners: ["me"]
     })
       .then(response => {
-        resolve(response.result)
+
+        console.log(response.result.images[0])
+        const result = {
+          species: response.result.images[0].classifiers[0].classes,
+          disease: response.result.images[0].classifiers[1].classes
+        }
+        console.log(result.species)
+        resolve(result)
       })
       .catch(err => {
         reject(err)
