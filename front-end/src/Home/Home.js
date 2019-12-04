@@ -30,7 +30,10 @@ export default class Home extends Component{
   constructor(props){
     super(props)
     this.state = {
-      classification: null,
+      classification: {
+        species: [{ class: "" }],
+        disease: [{ class: "" }]
+      },
       imageFile: null,
       imgSrc:null
     }
@@ -60,9 +63,12 @@ export default class Home extends Component{
       }
     })
     .then(res=>{
-      console.log("response")
-      this.state.classification = res.data
-      console.log(res.data)
+      console.log(res.data.images[0].classifiers)
+      this.state.classification = {
+        species: res.data.images[0].classifiers[0].classes,
+        disease: res.data.images[0].classifiers[1].classes.length == 0 ? [{class: "healthy", score: 1}] : res.data.images[0].classifiers[1].classes
+      }
+      console.log(this.state.classification)
       this.forceUpdate()
     })
     .catch(err=>{
@@ -76,13 +82,8 @@ export default class Home extends Component{
   {
     const maxSize = 5000000000;
     const {imgSrc} = this.state
-    let classificationlabel;
-    let splitted = ""
-    if (this.state.classification && this.state.classification.label) {
-      classificationlabel = this.state.classification.label;
-      splitted = classificationlabel.split('_')
-      console.log(splitted)
-    }
+    let species = this.state.classification.species[0].class
+    let disease = this.state.classification.disease[0].class
     
     return(
           <Style>
@@ -109,8 +110,8 @@ export default class Home extends Component{
             <Card.Body>
             
               {/* <div>Overall data</div> */}
-            <div>Species: {splitted[0]}</div>
-            <div>Disease: {splitted[1]}{" "}{splitted[2]}{" "}{splitted[3]}{" "}{splitted[4]}{" "}{splitted[5]}{" "}{splitted[6]}</div>
+            <div>Species: {species}</div>
+            <div>Disease: {disease}</div>
               
             {/* <Route path="/second">
             <div>Current Data</div>
