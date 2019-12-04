@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const tf = require('@tensorflow/tfjs-node')
-const tfds = require('@tensorflow/tfjs-data')
+const classify = require('../utils/index').classify
 const jpeg = require('jpeg-js')
 const multerConfig = require('../config/multer')
 const getS3Object = require('../utils/index').getS3Object
@@ -37,7 +36,7 @@ router.post('/', multerConfig.upload, function (req, res) {
 router.get('/:keyimg', validateToken, function (req, res) {
   const s3Name = res.locals.auth.username + '/' + req.params.keyimg
   getS3Object(s3Name).then((data) => {
-    predict(data.Body).then(
+    classify(data.Body).then(
       prediction => {
         console.log(prediction)
         res.status(200).send({ prediction: prediction, data: data.Body })
