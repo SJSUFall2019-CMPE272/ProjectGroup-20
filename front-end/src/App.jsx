@@ -78,12 +78,12 @@ class App extends Component {
     render() {
       return (
         <React.Fragment>
+          {/* <Layout> */}
           <div>
             {this.state.loggedIn&&<LNavigationBar/>}
             {!this.state.loggedIn&&<NavigationBar/>}</div>
           <Jumbotron/>
-          <Footer/>
-          <Layout>
+          {/* <Footer/> */}
             <Router>
             <Switch>
               <Route exact path="/" component={Home}/>
@@ -111,7 +111,7 @@ class App extends Component {
               <Route component={NoMatch}/>
             </Switch>
             </Router>
-          </Layout>
+          {/* </Layout> */}
         </React.Fragment>
       );
 
