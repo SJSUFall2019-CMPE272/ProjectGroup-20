@@ -116,7 +116,13 @@ class ImageComp extends Component{
         this.setState({
             imageClicked : true
         })
-        axios.post('/classify')
+        var Url = "/classify/" + final
+        console.log(Url)
+        axios({
+            url: Url,
+            method: 'get',
+            headers: {"token": token}
+        })
         .then(res=>{
             var species = res.data.classification.species[0].class
             var disease = res.data.classification.disease.length == 0 ? "healthy" : res.data.classification.disease[0].class
