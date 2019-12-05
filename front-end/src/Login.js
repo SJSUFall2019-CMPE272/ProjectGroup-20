@@ -19,11 +19,17 @@ const Style = styled.div`
 }
 .input-group{
     justify-content:center;
+    padding-left: 10em
+    padding-right: 10em
 }.p{
     text-align:center;
 }
 .text{
     width: 10em;
+}
+.btn-container{
+    padding-left: 10em
+    padding-right: 10em
 }
 `;
 
@@ -153,7 +159,9 @@ export class Login extends React.Component{
                 </div>
                 </FormGroup>
                 {confirmationBox}
+                <div className="btn-container">
                 <Button to ={"/LHome"} onClick={this.handleClick.bind(this)} className="btn-dark btn-block">Log in</Button>
+                </div>
                 <div className="text-center">
                     <p>
                     No account? Create and account 

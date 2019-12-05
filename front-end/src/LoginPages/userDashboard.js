@@ -17,6 +17,13 @@ const Style = styled.div`
         color:white
         text-decoration:none
     }
+    .btn-dark{
+        width :10em
+    }
+    .btn-container{
+        padding-top : 5em
+        padding-left: 60em
+    }
     .sider{
         background-color: white
     }
@@ -164,12 +171,12 @@ export class Dashboard extends Component{
     
     render(){
         return(
-            // <Style>
+             <Style>
             <div>
                 
                 <Router>
                 <div className="container">
-                <Layout>
+                
                     <Header className="header">
                         <Avatar className="avatar" icon="user"/>
                         <Title className="title" level={3}>PDD User Dashboard</Title>
@@ -179,24 +186,7 @@ export class Dashboard extends Component{
                             <Menu
                                 defaultSelectedKeys={['Images']}
                                 mode="inline">
-                                {/* <SubMenu
-                                    title={
-                                        <span>
-                                        <Icon type="file-image"/>
-                                        <span>Uploaded files</span>
-                                        </span>
-                                    }>
-                                    <Menu.ItemGroup key='files' title="Files">
-                                    <Menu.Item key='Last'>
-                                            <Link to="/UserDashboard/last">Last uploaded files
-                                            </Link>
-                                        </Menu.Item>
-                                        <Menu.Item key='All'>
-                                            <Link to="/UserDashboard/all">All uploaded files
-                                            </Link>
-                                            </Menu.Item>
-                                            </Menu.ItemGroup>
-                                </SubMenu> */}
+                                
                                 <Menu.Item key='Images'>
                                     <Link to="/UserDashboard">Images
                                     </Link>
@@ -223,14 +213,7 @@ export class Dashboard extends Component{
                                 {<Route exact path="/UserDashboard/upload">
                                 <DropZoneComp/>
                                 </Route>}
-                                {/* <Route 
-                                    path={"/UserDashboard/upload"}
-                                    render = {props=>(<UploadComp {...props} imgName={this.state.imgName}/>)} 
-                                /> */}
-                                {/* <Route exact path="/UserDashboard/last">
-                                    Last uploaded file
-                                </Route> */}
-                                {/* <Route exact path="/UserDashboard/all" component={AllFiles}/>  */}
+                                
                                 <Route 
                                     path={"/UserDashboard"}
                                     render = {props=>(<ImageComp {...props} />)} 
@@ -245,14 +228,14 @@ export class Dashboard extends Component{
                             </Content>
                         </Layout>
                     </Layout>
-                </Layout>
+                
                 </div>
-                <div>
+                <div className="btn-container">
                     <Button onClick={this.handleClick.bind(this)} className="btn-dark btn-block"><Link to="/" className="link" >Log out</Link></Button> 
                 </div>
                 </Router>
                 </div>
-            // </Style>
+             </Style>
            
            )
     }

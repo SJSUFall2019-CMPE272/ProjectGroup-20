@@ -19,12 +19,18 @@ const Style = styled.div`
 }
 .input-group{
     justify-content:center;
+    padding-left: 10em
+    padding-right: 10em
 }
 .p{
     text-align:center;
 }
 .text{
     width: 10em;
+}
+.btn-container{
+    padding-left: 10em
+    padding-right: 10em
 }
 `;
 
@@ -43,7 +49,9 @@ export class SignUp extends React.Component{
     }
     
     handleRClick= e =>{
-        axios.post("/auth/register",{
+        if(this.state.password===this.state.password_confirmation)
+        {
+            axios.post("/auth/register",{
                 username:this.state.username,
                 email: this.state.email,
                 password:this.state.password
@@ -56,7 +64,12 @@ export class SignUp extends React.Component{
             }).catch(error=>{
                 console.log(error)
             })
-        e.preventDefault()
+             e.preventDefault()
+        }
+        else{
+            alert("Password does not match password confirmation, please reenter")
+        }
+        
 
     }
     handleChange (e){
@@ -149,7 +162,10 @@ export class SignUp extends React.Component{
                     
                     </div>
                 </FormGroup>
+                <div className="btn-container">
                 <Button onClick={this.handleRClick.bind(this)} className="btn-dark btn-block">Sign Up</Button>
+                </div>
+                
                 <div className="text-center">
                     <p>
                     Already have an account? Sign in
