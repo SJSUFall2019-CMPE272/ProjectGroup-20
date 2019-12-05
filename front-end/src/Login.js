@@ -128,7 +128,7 @@ export class Login extends React.Component{
                     <InputGroup.Text className="text" id="inputGroup-sizing-default">Username</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                     placeholder="Username"
+                    placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     onChange={this.handleChange.bind(this)}
