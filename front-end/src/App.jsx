@@ -30,28 +30,19 @@ class App extends Component {
   }
   
   checkLoginStatus(){
-    // //makes sure that user is logged in after page is reloaded
-    // axios.get(axios.post("http://localhost:4000/auth/register")
-    //   .then(response=>{
-    //     //backend says is logged in while front end does not, change front end to logged in
-    //     if(response.data.logged_in && this.state.loggedIn==="false"){
-    //       this.setState({
-    //         loggedIn : true,
-    //         user: response.data.user
-    //       })
-    //     }
-    //     //backend says is not logged in while front end it is, change front end to not logged in
-    //       else if(!response.data.logged_in && this.state.loggedIn==="true"){
-    //         this.setState({
-    //           loggedIn: false,
-    //           user:{}
-    //         })
-    //       }
-    //     }
-    //   )
-    //   .catch(error=>{
-    //     console.log(error)
-    //   }))
+
+        if(myStorage.getItem("token")==null && this.state.loggedIn==="false"){
+          this.setState({
+            loggedIn : true,
+            user: {}
+          })
+        }
+          else if(!myStorage.getItem("token")==null && this.state.loggedIn==="true"){
+            this.setState({
+              loggedIn: false,
+              user:{}
+            })
+          }
   }
 
   componentDidMount(){

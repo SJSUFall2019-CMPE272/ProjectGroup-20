@@ -88,25 +88,17 @@ class ImageComp extends Component{
                 headers: {"token": token}
             })
         }).then(response=>{
-            console.log(response.data)
-            const base64 = btoa(
-                new Uint8Array(response.data).reduce(
-                  (data, byte) => data + String.fromCharCode(byte),
-                  '',
-                ),
-              );
-              this.setState({ source: "data:;base64," + base64 });
-              console.log(this.state.source)
+            
         })
         .catch(err=>{
             console.log(err)
         })
     }
-    handleImageClick(){
+    handleImageClick(e){
+        console.log(e.target.innerText)
         const token = myStorage.getItem("token")
-        console.log(this.state.allImages[3])
         //remove username from response
-        var stringed = JSON.stringify(this.state.allImages[3])
+        var stringed = JSON.stringify(e.target.innerText)
         var splitted = stringed.split("/").pop()
         var final = splitted.replace('"',"")
 
@@ -124,8 +116,9 @@ class ImageComp extends Component{
             headers: {"token": token}
         })
         .then(res=>{
-            var species = res.data.classification.species[0].class
-            var disease = res.data.classification.disease.length == 0 ? "healthy" : res.data.classification.disease[0].class
+            console.log(res.data)
+            var species = res.data.prediction.species[0].class
+            var disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
 
             console.log(species)
             alert("Plant type="+ species +"\nDisease ="+disease)
@@ -142,9 +135,9 @@ class ImageComp extends Component{
                 {
                     this.state.allImages.map((name) => {
                         return( <div>
-                            <ListGroup.Item onClick={this.handleImageClick.bind(this)}><div>
+                            <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
                                 {name}
-                                <img src={this.state.source}/></div></ListGroup.Item></div>
+                                <img src={this.state.source}/></ListGroup.Item></div>
                         )
                     })
                 }
@@ -188,7 +181,7 @@ export class Dashboard extends Component{
                                 mode="inline">
                                 
                                 <Menu.Item key='Images'>
-                                    <Link to="/UserDashboard">Images
+                                    <Link to="/UserDashboard/image">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
@@ -215,7 +208,7 @@ export class Dashboard extends Component{
                                 </Route>}
                                 
                                 <Route 
-                                    path={"/UserDashboard"}
+                                    path={"/UserDashboard/image"}
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
