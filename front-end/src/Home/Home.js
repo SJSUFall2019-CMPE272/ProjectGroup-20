@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
-import {Container,Row,Col,Card,Nav,Image,ProgressBar} from 'react-bootstrap'
+import {Container,Row,Col,Card,Nav,Image, ProgressBar} from 'react-bootstrap'
 import styled from 'styled-components'
 import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
@@ -59,9 +59,10 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file',acceptedFiles[0])
-    axios.post("/upload",data,{
-      onUploadProgress:ProgressEvent=>{
-        console.log('progress: '+Math.round(ProgressEvent.loaded /ProgressEvent.total*100)+'%')
+    axios.post("http://184.172.252.173:30120/upload",data,{
+      onUploadProgress:progressEvent=>{
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+        document.getElementsByClassName('progress-container').innerHTML = percentCompleted;
       }
     })
     .then(res=>{
@@ -97,9 +98,9 @@ export default class Home extends Component{
             <Card.Header>
               <Nav variant="tabs" defaultActiveKey="1">
                 <Nav.Item>
-                  <Nav.Link ><Link to="/">
+                  <Nav.Link >
                     Overall Data
-                  </Link></Nav.Link>
+                  </Nav.Link>
                 </Nav.Item>
                 {/* <Nav.Item>
                   <Nav.Link eventKey="2"><Link to="/second">
@@ -153,6 +154,9 @@ export default class Home extends Component{
                 )}
               }
             </Dropzone>
+            <div className="progress-container">
+
+            </div>
         </Card>
         </Col>
         </Row>
