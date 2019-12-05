@@ -3,7 +3,7 @@
 - Goal: Use images of plants to detect any kind of diseases
 - Target audience: Farmers, Plant enthusiasts
 
-Current development deployment on IBM Cloud K8s: http://173.193.106.54:32594/
+Current development deployment on IBM Cloud K8s: http://184.172.252.173:30120/
 
 # Abstract
 
