@@ -28,6 +28,6 @@ const uploadS3 = multer({
 const upload = multer()
 
 module.exports = {
-  uploadToS3: uploadS3.single('file'),
-  upload: upload.single('file')
+  uploadToS3: uploadS3.any(),
+  upload: upload.any()
 }
