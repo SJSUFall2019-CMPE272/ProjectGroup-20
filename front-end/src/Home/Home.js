@@ -21,8 +21,18 @@ const Style = styled.div`
 }
 `;
 const DropZoneContainer = styled.div`
-  height:31em;
+  height:30em;
   text-align:center;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: #00e676;
+  border-style: dashed;
+  background-color: #fafafa;
+  color: #bdbdbd;
+  outline: none;
+  transition: border .24s ease-in-out;
 `;
 
 
@@ -58,8 +68,8 @@ export default class Home extends Component{
     },false)
     reader.readAsDataURL(currentFile)
 
-    data.append('file',acceptedFiles[0])
-    axios.post("/upload",data,{
+    data.append('file', acceptedFiles[0])
+    axios.post("http://localhost:3000/upload",data,{
       onUploadProgress:progressEvent=>{
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
         document.getElementsByClassName('progress-container').innerHTML = percentCompleted;
@@ -93,8 +103,8 @@ export default class Home extends Component{
 
         <Row>
         <Col>
-          <Row className="rowInfo">
-          <Card border="dark" style={{width:'30em',height:'31em'}}>
+          {/* <Row className="rowInfo"> */}
+          <Card border="dark" style={{width:'30em',height:'33em'}}>
             <Card.Header>
               <Nav variant="tabs" defaultActiveKey="1">
                 <Nav.Item>
@@ -120,13 +130,16 @@ export default class Home extends Component{
               </Route> */}
             </Card.Body>
           </Card>
-          </Row>
+          {/* </Row> */}
         </Col>
         <Col>
-        <Card border="dark" style={{width:'30em',height:'31em',marginTop:'1em'}} body>
+        {/* <Row className="rowInfo"> */}
+        
+        <Card border="dark" style={{width:'30em',height:'33em',marginTop:'0em', paddingBottom:'1em'}} body>
           {imgSrc!==null?
             <img style={{width:'27em',height:'27em'}} src={imgSrc}/>
             :''}
+            
         <Dropzone 
             className="drop"
             style={{}}
@@ -158,6 +171,8 @@ export default class Home extends Component{
 
             </div>
         </Card>
+        {/* </Row> */}
+
         </Col>
         </Row>
         
