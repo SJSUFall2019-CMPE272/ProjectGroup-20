@@ -181,7 +181,7 @@ export class Dashboard extends Component{
                                 mode="inline">
                                 
                                 <Menu.Item key='Images'>
-                                    <Link to="/UserDashboard/image">Images
+                                    <Link to="/UserDashboard">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
