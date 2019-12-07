@@ -51,7 +51,7 @@ class ImageComp extends Component{
     constructor(props){
         super(props)
         this.state={
-            name :'Ryan',
+            name : window.localStorage.getItem("username"),
             password: '',
             allImages: [],
             imageData:null,
@@ -151,7 +151,7 @@ export class Dashboard extends Component{
     constructor(props){
         super(props)
         this.state={
-            name :'Ryan',
+            name : window.localStorage.getItem("username"),
             password: '',
             loading: false,
             imgName:null
