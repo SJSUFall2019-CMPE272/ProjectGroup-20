@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import plantImage from '../assets/plantb.jpg'
+import farmImage from '../assets/agriculture.jpg'
+
 import { DatePicker, message } from 'antd';
 
 const Style = styled.div`
@@ -105,25 +107,24 @@ export default class Home extends Component{
         <Col>
           {/* <Row className="rowInfo"> */}
           <Card border="dark" style={{width:'30em',height:'33em'}}>
-            <Card.Header>
-              <Nav variant="tabs" defaultActiveKey="1">
-                <Nav.Item>
-                  <Nav.Link >
-                    Overall Data
-                  </Nav.Link>
-                </Nav.Item>
-                {/* <Nav.Item>
-                  <Nav.Link eventKey="2"><Link to="/second">
-                    Current Plant Data
-                  </Link></Nav.Link>
-                </Nav.Item> */}
-              </Nav>
+            <Card.Header style={{textAlign: 'center'}}>
+              <h2>
+              Model Prediction
+              </h2>
             </Card.Header>
             <Card.Body>
             
               {/* <div>Overall data</div> */}
-            <div>Species: {species}</div>
-            <div>Disease: {disease}</div>
+            <div>
+              <h3>Species: {species} </h3>
+            </div>
+            <div>
+              <h3>Disease: {disease}</h3>
+            </div>
+
+            {imgSrc!==null?
+            <img style={{width:'27em',height:'18em'}} src={imgSrc}/>
+            :''}
               
             {/* <Route path="/second">
             <div>Current Data</div>
@@ -136,9 +137,7 @@ export default class Home extends Component{
         {/* <Row className="rowInfo"> */}
         
         <Card border="dark" style={{width:'30em',height:'33em',marginTop:'0em', paddingBottom:'1em'}} body>
-          {imgSrc!==null?
-            <img style={{width:'27em',height:'27em'}} src={imgSrc}/>
-            :''}
+
             
         <Dropzone 
             className="drop"
@@ -175,10 +174,38 @@ export default class Home extends Component{
 
         </Col>
         </Row>
+
         
         </Container>
+        {/* <Container> */}
+          <Row style={{paddingBottom: "1em", marginTop: "1em", marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center", color:'white',  backgroundColor:"#698e47"}}>
+              <h4 style={{color:"white"}}>About</h4>
+              <Col>
+              <p>Agriculture in the United States is a major 
+                driver of economic growth, accounting for 11% 
+                percent of total employment and $132.8 billion 
+                dollars to U.S GDP in 2017 . Increasing efficiency 
+                and reducing waste is a key research area in agricultural, 
+                particularly as climate change creates favorable conditions 
+                for pests and diseases to proliferate throughout a crop.
+                 Our project provides a tool to help farmers discover diseases 
+                 within their crop by using IBM’s visual recognition API to identify 
+                 diseases of interest to farm owners. The tool provides farmers a platform 
+                 to train a machine learning model customized to their problem while also 
+                 providing a dashboard for visualizing past predictions, if needed. The model 
+                 is trained and validated on the PlantVillage-Dataset.</p>
+                 </Col>
+                 <Col>
+                 <img src={farmImage} width="320" height="213" />
+                 </Col>
+          </Row>
+          <Row style={{marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center"}}>
+            <h4 style={{color:"black"}}>Contact</h4>
+          </Row>
+
+        {/* </Container> */}
         </Router>
-      // </Style>
+        //  </Style>
     )
   }
 }
