@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, {Component } from 'react'
 import styled from 'styled-components'
 import {Layout,Avatar,Menu,Collapse,Breadcrumb,Card} from 'antd'
-import {Button, ListGroup} from 'react-bootstrap'
+import {Col, Button, ListGroup} from 'react-bootstrap'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
 import "antd/dist/antd.css";
@@ -43,6 +43,10 @@ const Style = styled.div`
     .avatar{
         float:right
     }
+    .h6{
+        float:right
+        color: white
+    }
     .header{
         padding:1em
     }
@@ -55,6 +59,7 @@ class ImageComp extends Component{
             name : window.localStorage.getItem("username"),
             password: '',
             allImages: [],
+            userImages: [],
             imageData:null,
             imageClicked: false,
             source: null,
@@ -82,6 +87,20 @@ class ImageComp extends Component{
             var Url = '/classify/'+final
             console.log(response.data)
             this.state.allImages = response.data
+            console.log(this.state.allImages)
+
+            this.state.userImages = this.state.allImages.filter((imageName) => {
+                var tokens = imageName.split("/")
+
+                if(tokens[0] == this.state.name) {
+                    return true
+                }
+                else if(tokens[0] != this.state.name) {
+                    return false
+                }
+            })
+
+            console.log(this.state.userImages)
             this.forceUpdate()
             return axios({
                 url: Url,
@@ -103,6 +122,7 @@ class ImageComp extends Component{
     //show prediction of uploaded pictures
     handleImageClick(e){
         const token = myStorage.getItem("token")
+        console.log(e.target.innerText)
         var stringed = JSON.stringify(e.target.innerText)
         var splitted = stringed.split("/").pop()
         var final = splitted.replace('"',"")
@@ -153,7 +173,7 @@ class ImageComp extends Component{
             <ListGroup>
                             <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
                             <Collapse accordion>
-                                {this.createPanels(this.state.allImages,this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)}
+                                {this.createPanels(this.state.userImages,this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)}
                             </Collapse>
                             </ListGroup.Item>
                 
@@ -187,8 +207,10 @@ export class Dashboard extends Component{
                 <div className="container">
                 
                     <Header className="header">
-                        <Avatar className="avatar" icon="user"/>
+                    <Avatar className="avatar" icon="user"/>                    
                         <Title className="title" level={3}>PDD User Dashboard</Title>
+                        <h6>Test</h6>
+
                     </Header>
                     <Layout>
                         <Sider className="sider">
@@ -228,11 +250,14 @@ export class Dashboard extends Component{
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
-                                    <div>
+
+                                    <Col>
+                                    <div>                                    
                                     {
                                         this.state.name
-                                    }
-                                    </div>
+                                    }</div>
+
+                                    </Col>
                                 </Route>
                             </Content>
                         </Layout>
