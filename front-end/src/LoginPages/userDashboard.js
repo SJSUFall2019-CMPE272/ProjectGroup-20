@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Layout,Avatar,Menu,Icon,Breadcrumb} from 'antd'
+import {Layout,Avatar,Menu,Collapse,Breadcrumb,Card} from 'antd'
 import {Button, ListGroup} from 'react-bootstrap'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
@@ -10,6 +10,7 @@ import axios from 'axios'
 import DropZoneComp from '../components/Dropzone'
 import plantImage from '../assets/plantb.jpg'
 const {Header,Sider,Content,Footer} = Layout
+const {Panel} = Collapse
 var myStorage = window.localStorage
 
 const Style = styled.div`
@@ -46,7 +47,7 @@ const Style = styled.div`
         padding:1em
     }
 `;
-
+//Show images thats been uploaded
 class ImageComp extends Component{
     constructor(props){
         super(props)
@@ -56,9 +57,14 @@ class ImageComp extends Component{
             allImages: [],
             imageData:null,
             imageClicked: false,
-            source: null
+            source: null,
+            species:[],
+            disease:[],
+            speciesScore:[],
+            diseaseScore:[]
         }
     }
+    //get from database
     componentDidMount(){
         const token = myStorage.getItem("token")
         axios({
@@ -67,49 +73,46 @@ class ImageComp extends Component{
             headers: {"token": token}
         })
         .then(response=>{
-            console.log(response.data)
-
-            //remove username from response
+            //remove username from response.data
             var stringed = JSON.stringify(response.data)
             var splitted = stringed.split("/").pop()
             var final = splitted.replace('"]',"")
-            console.log(final)
-
-            var Url = '/upload/image/'+final
-            console.log(Url)
             
-
+            //var Url = 'http://184.172.252.173:30120/upload/image/'+final
+            var Url = '/classify/'+final
+            console.log(response.data)
             this.state.allImages = response.data
             this.forceUpdate()
             return axios({
                 url: Url,
                 method: 'get',
-                responseType:'arraybuffer',
                 headers: {"token": token}
             })
-        }).then(response=>{
+        }).then(res=>{
+            this.state.species = res.data.prediction.species[0].class
+            this.state.speciesScore = res.data.prediction.species[0].score
+            this.state.disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
+            this.state.diseaseScore = res.data.prediction.disease[0].score
+            console.log(this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)
             
         })
         .catch(err=>{
             console.log(err)
         })
     }
+    //show prediction of uploaded pictures
     handleImageClick(e){
-        console.log(e.target.innerText)
         const token = myStorage.getItem("token")
-        //remove username from response
         var stringed = JSON.stringify(e.target.innerText)
         var splitted = stringed.split("/").pop()
         var final = splitted.replace('"',"")
 
         const Data = new FormData()
         Data.append('file',final)
-        console.log(Data)
         this.setState({
             imageClicked : true
         })
         var Url = "/classify/" + final
-        console.log(Url)
         axios({
             url: Url,
             method: 'get',
@@ -117,11 +120,13 @@ class ImageComp extends Component{
         })
         .then(res=>{
             console.log(res.data)
-            var species = res.data.prediction.species[0].class
-            var disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
-
-            console.log(species)
-            alert("Plant type="+ species +"\nDisease ="+disease)
+            this.setState({
+                species : res.data.prediction.species[0].class,
+                speciesScore: res.data.prediction.species[0].score,
+                disease : res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class,
+                diseaseScore: res.data.prediction.disease== 0 ? "N/A" : res.data.prediction.disease[0].score
+            })
+            console.log(this.state.species)
         })
         .catch(err=>{
             console.log(err)
@@ -129,18 +134,29 @@ class ImageComp extends Component{
         })
     }
     componentWillUnmount(){}
+    
+    
+    createPanels(data,s,ss,d,ds){
+       return data.map((thing)=>{
+        return (<Panel header={thing}>
+            <p>Species: {s}</p>
+            <p>Classification Score: {((ss)*100).toFixed(2)}</p>
+            <p>Disease: {d}</p>
+            <p>Confidence Score: {((ds)*100).toFixed(2)}</p>
+        </Panel>)
+       })
+}
     render(){
         return(
+            
+            
             <ListGroup>
-                {
-                    this.state.allImages.map((name) => {
-                        return( <div>
                             <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
-                                {name}
-                                <img src={this.state.source}/></ListGroup.Item></div>
-                        )
-                    })
-                }
+                            <Collapse accordion>
+                                {this.createPanels(this.state.allImages,this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)}
+                            </Collapse>
+                            </ListGroup.Item>
+                
             </ListGroup>
         )
     }
@@ -181,7 +197,7 @@ export class Dashboard extends Component{
                                 mode="inline">
                                 
                                 <Menu.Item key='Images'>
-                                    <Link to="/UserDashboard">Images
+                                    <Link to="/UserDashboard/image">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
@@ -208,7 +224,7 @@ export class Dashboard extends Component{
                                 </Route>}
                                 
                                 <Route 
-                                    exact path={"/UserDashboard"}
+                                    path={"/UserDashboard/image"}
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
