@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Layout,Avatar,Menu,Icon,Breadcrumb,Card} from 'antd'
+import {Layout,Avatar,Menu,Collapse,Breadcrumb,Card} from 'antd'
 import {Button, ListGroup} from 'react-bootstrap'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
@@ -10,6 +10,7 @@ import axios from 'axios'
 import DropZoneComp from '../components/Dropzone'
 import plantImage from '../assets/plantb.jpg'
 const {Header,Sider,Content,Footer} = Layout
+const {Panel} = Collapse
 var myStorage = window.localStorage
 
 const Style = styled.div`
@@ -91,7 +92,7 @@ class ImageComp extends Component{
             this.state.species = res.data.prediction.species[0].class
             this.state.speciesScore = res.data.prediction.species[0].score
             this.state.disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
-            this.state.diseaseScore = res.data.prediction.species[0].score
+            this.state.diseaseScore = res.data.prediction.disease[0].score
             console.log(this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)
             
         })
@@ -101,7 +102,6 @@ class ImageComp extends Component{
     }
     //show prediction of uploaded pictures
     handleImageClick(e){
-        console.log(e.target.innerText)
         const token = myStorage.getItem("token")
         var stringed = JSON.stringify(e.target.innerText)
         var splitted = stringed.split("/").pop()
@@ -124,7 +124,7 @@ class ImageComp extends Component{
                 species : res.data.prediction.species[0].class,
                 speciesScore: res.data.prediction.species[0].score,
                 disease : res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class,
-                diseaseScore: res.data.prediction.species[0].score
+                diseaseScore: res.data.prediction.disease== 0 ? "N/A" : res.data.prediction.disease[0].score
             })
             console.log(this.state.species)
         })
@@ -134,23 +134,29 @@ class ImageComp extends Component{
         })
     }
     componentWillUnmount(){}
+    
+    
+    createPanels(data,s,ss,d,ds){
+       return data.map((thing)=>{
+        return (<Panel header={thing}>
+            <p>Species: {s}</p>
+            <p>Classification Score: {((ss)*100).toFixed(2)}</p>
+            <p>Disease: {d}</p>
+            <p>Confidence Score: {((ds)*100).toFixed(2)}</p>
+        </Panel>)
+       })
+}
     render(){
         return(
+            
+            
             <ListGroup>
-                {
-                    this.state.allImages.map((name) => {
-                        return( <div>
                             <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
-                                <Card title={name}>
-                                    <p>Species: {this.state.species}</p>
-                                    <p>Confidence Score: {((this.state.speciesScore)*100).toFixed(2)}</p>
-                                    <p>Disease: {this.state.disease}</p>
-                                    <p>Confidence Score: {((this.state.diseaseScore)*100).toFixed(2)}</p>
-                                </Card>
-                                </ListGroup.Item></div>
-                        )
-                    })
-                }
+                            <Collapse accordion>
+                                {this.createPanels(this.state.allImages,this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)}
+                            </Collapse>
+                            </ListGroup.Item>
+                
             </ListGroup>
         )
     }

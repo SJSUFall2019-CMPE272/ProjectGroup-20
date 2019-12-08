@@ -72,7 +72,7 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file', acceptedFiles[0])
-    axios.post("http://localhost:3000/upload",data,{
+    axios.post("/upload",data,{
       onUploadProgress:progressEvent=>{
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
         document.getElementsByClassName('progress-container').innerHTML = percentCompleted;
@@ -96,6 +96,8 @@ export default class Home extends Component{
     const maxSize = 5000000000;
     const {imgSrc} = this.state
     const species = this.state.classification.species[0].class
+    const speciesScore = this.state.classification.species[0].score
+    const diseaseScore = this.state.classification.disease.length == 0 ? "healthy" : this.state.classification.disease[0].score
     const disease = this.state.classification.disease.length == 0 ? "healthy" : this.state.classification.disease[0].class
     console.log(species)
     
@@ -117,14 +119,20 @@ export default class Home extends Component{
             
               {/* <div>Overall data</div> */}
             <div>
-              <h3>Species: {species} </h3>
+              <h4>Species: {species} </h4>
             </div>
             <div>
-              <h3>Disease: {disease}</h3>
+              <h4>Classification Score: {((speciesScore)*100).toFixed(2)}% </h4>
+            </div>
+            <div>
+              <h4>Disease: {disease}</h4>
+            </div>
+            <div>
+              <h4>Confidence Score: {((diseaseScore)*100).toFixed(2)}%</h4>
             </div>
 
             {imgSrc!==null?
-            <img style={{width:'27em',height:'18em'}} src={imgSrc}/>
+            <img style={{justifyContent:'center',width:'16em',height:'12em'}} src={imgSrc}/>
             :''}
               
             {/* <Route path="/second">
@@ -179,22 +187,22 @@ export default class Home extends Component{
         
         </Container>
         {/* <Container> */}
-          <Row name="about" style={{paddingBottom: "1em", marginTop: "1em", marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center", color:'white',  backgroundColor:"#698e47"}}>
-              <h4 style={{color:"white"}}>About</h4>
+          <Row name="about" style={{paddingBottom: "1em", marginTop: "5em", marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center", color:'white',  backgroundColor:"#698e47"}}>
+              {/* <h4 style={{color:"white"}}>About</h4> */}
               <Col>
-              <p>Agriculture in the United States is a major 
-                driver of economic growth, accounting for 11% 
-                percent of total employment and $132.8 billion 
-                dollars to U.S GDP in 2017 . Increasing efficiency 
-                and reducing waste is a key research area in agricultural, 
-                particularly as climate change creates favorable conditions 
-                for pests and diseases to proliferate throughout a crop.
-                 Our project provides a tool to help farmers discover diseases 
-                 within their crop by using IBM’s visual recognition API to identify 
-                 diseases of interest to farm owners. The tool provides farmers a platform 
-                 to train a machine learning model customized to their problem while also 
-                 providing a dashboard for visualizing past predictions, if needed. The model 
-                 is trained and validated on the PlantVillage-Dataset.</p>
+              <h3 style={{color:'white'}}>About</h3>
+              <p style={{paddingLeft:"4em",paddingRight:"4em"}}>Agriculture in the United States is a major driver of economic growth, 
+           accounting for 11% percent of total employment and $132.8 billion dollars to U.S
+           . GDP in 2017 [1]. Increasing efficiency and reducing waste is a key research
+            area in agricultural, particularly as climate change creates
+             favorable conditions for pests and diseases to proliferate 
+             throughout a crop.</p>
+             <p style={{paddingLeft:"4em",paddingRight:"4em"}}> Our project provides a tool to help farmers discover diseases 
+             within their crop by using IBM’s visual recognition API to identify diseases of 
+             interest to farm owners. The tool provides farmers a platform to train a machine 
+             learning model customized to their problem while also providing a dashboard for 
+             visualizing past predictions, if needed. The model is trained and validated on 
+             the PlantVillage-Dataset.</p>
                  </Col>
                  <Col>
                  <img src={farmImage} width="320" height="213" />
