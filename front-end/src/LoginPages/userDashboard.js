@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Layout,Avatar,Menu,Icon,Breadcrumb} from 'antd'
+import {Layout,Avatar,Menu,Icon,Breadcrumb,Card} from 'antd'
 import {Button, ListGroup} from 'react-bootstrap'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import Title from 'antd/lib/typography/Title'
@@ -46,19 +46,23 @@ const Style = styled.div`
         padding:1em
     }
 `;
-
+//Show images thats been uploaded
 class ImageComp extends Component{
     constructor(props){
         super(props)
         this.state={
             name :'Ryan',
-            password: '',
             allImages: [],
             imageData:null,
             imageClicked: false,
-            source: null
+            source: null,
+            species:[],
+            disease:[],
+            speciesScore:[],
+            diseaseScore:[]
         }
     }
+    //get from database
     componentDidMount(){
         const token = myStorage.getItem("token")
         axios({
@@ -67,37 +71,37 @@ class ImageComp extends Component{
             headers: {"token": token}
         })
         .then(response=>{
-            console.log(response.data)
-
-            //remove username from response
+            //remove username from response.data
             var stringed = JSON.stringify(response.data)
             var splitted = stringed.split("/").pop()
             var final = splitted.replace('"]',"")
-            console.log(final)
-
-            var Url = '/upload/image/'+final
-            console.log(Url)
             
-
+            //var Url = 'http://184.172.252.173:30120/upload/image/'+final
+            var Url = '/classify/'+final
+            
             this.state.allImages = response.data
             this.forceUpdate()
             return axios({
                 url: Url,
                 method: 'get',
-                responseType:'arraybuffer',
                 headers: {"token": token}
             })
-        }).then(response=>{
+        }).then(res=>{
+            this.state.species = res.data.prediction.species[0].class
+            this.state.speciesScore = res.data.prediction.species[0].score
+            this.state.disease = res.data.prediction.disease[0].class
+            this.state.diseaseScore = res.data.prediction.species[0].score
+            console.log(this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)
             
         })
         .catch(err=>{
             console.log(err)
         })
     }
+    //show prediction of uploaded pictures
     handleImageClick(e){
         console.log(e.target.innerText)
         const token = myStorage.getItem("token")
-        //remove username from response
         var stringed = JSON.stringify(e.target.innerText)
         var splitted = stringed.split("/").pop()
         var final = splitted.replace('"',"")
@@ -109,7 +113,6 @@ class ImageComp extends Component{
             imageClicked : true
         })
         var Url = "/classify/" + final
-        console.log(Url)
         axios({
             url: Url,
             method: 'get',
@@ -117,11 +120,14 @@ class ImageComp extends Component{
         })
         .then(res=>{
             console.log(res.data)
-            var species = res.data.prediction.species[0].class
-            var disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
+            this.setState({
+                species : res.data.prediction.species[0].class,
+                disease : res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
+            })
+            
 
-            console.log(species)
-            alert("Plant type="+ species +"\nDisease ="+disease)
+            console.log(this.state.species)
+            alert("Plant type="+ this.state.species +"\nDisease ="+this.state.disease)
         })
         .catch(err=>{
             console.log(err)
@@ -136,8 +142,11 @@ class ImageComp extends Component{
                     this.state.allImages.map((name) => {
                         return( <div>
                             <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
-                                {name}
-                                <img src={this.state.source}/></ListGroup.Item></div>
+                                <Card title={name}>
+                                    <p>{this.state.species}</p>
+                                    <p>{this.state.disease}</p>
+                                </Card>
+                                </ListGroup.Item></div>
                         )
                     })
                 }
