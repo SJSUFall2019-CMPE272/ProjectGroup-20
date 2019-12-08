@@ -54,6 +54,7 @@ export class Login extends React.Component{
                 console.log(response)
                 if(response.data.accessToken!=null){
                     myStorage.setItem("token",response.data.accessToken)
+                    myStorage.setItem("username", this.state.username)
                     var token = myStorage.getItem("token")
                     this.props.handleLogin(token)
                     this.props.history.push("/UserDashboard")
