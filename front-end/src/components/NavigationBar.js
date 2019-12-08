@@ -17,7 +17,7 @@ const Styles = styled.div`
 
 export const NavigationBar = () =>(
     <Styles>
-        <Navbar sticky="top" expand="lg">
+        <Navbar fixed="top" expand="lg">
             <Navbar.Brand href="/">PDD</Navbar.Brand>
             <Navbar.Toggle aria-controls = "basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
