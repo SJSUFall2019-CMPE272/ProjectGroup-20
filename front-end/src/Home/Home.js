@@ -72,7 +72,7 @@ export default class Home extends Component{
     reader.readAsDataURL(currentFile)
 
     data.append('file', acceptedFiles[0])
-    axios.post("http://localhost:3000/upload",data,{
+    axios.post("/upload",data,{
       onUploadProgress:progressEvent=>{
         var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
         document.getElementsByClassName('progress-container').innerHTML = percentCompleted;
