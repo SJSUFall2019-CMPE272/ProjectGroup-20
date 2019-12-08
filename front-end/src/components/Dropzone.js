@@ -6,9 +6,20 @@ var myStorage = window.localStorage
 
 const Style = styled.div``
 const DropZoneContainer = styled.div`
-  
-  text-align:center;
+height:30em;
+text-align:center;
+align-items: center;
+padding: 20px;
+border-width: 2px;
+border-radius: 2px;
+border-color: #00e676;
+border-style: dashed;
+background-color: #fafafa;
+color: #bdbdbd;
+outline: none;
+transition: border .24s ease-in-out;
 `;
+
 class DropZoneComp extends Component {
   constructor(props)
   {
