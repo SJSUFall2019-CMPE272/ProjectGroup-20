@@ -10,7 +10,7 @@ const AWS = require('aws-sdk')
 require('dotenv').config()
 
 router.post('/', multerConfig.upload, (req, res) => {
-  classify(req.file.buffer).then(response => {
+  classify(req.files[0].buffer).then(response => {
     res.status(200).json(response)
   }).catch(error => {
     res.status(400).json(error)
@@ -18,9 +18,13 @@ router.post('/', multerConfig.upload, (req, res) => {
 })
 
 router.post('/save', validateToken, multerConfig.upload, (req, res) => {
-  const s3Name = res.locals.auth.username + '/' + req.file.originalname
-  uploadS3Object(s3Name, req.file.buffer).then(() => {
-    res.status(200).send('Successfully uploaded file')
+  const promises = []
+  for (const f of req.files) {
+    const s3Name = res.locals.auth.username + '/' + f.originalname
+    promises.push(uploadS3Object(s3Name, f.buffer))
+  }
+  Promise.all(promises).then(() => {
+    res.status(200).send('Successfully uploaded file(s)')
   }).catch(err => {
     res.status(400).send(err)
   })

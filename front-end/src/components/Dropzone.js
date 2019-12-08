@@ -25,7 +25,9 @@ class DropZoneComp extends Component {
       imageFile: acceptedFiles[0]
     })
     const data = new FormData()
-    data.append('file',acceptedFiles[0])
+    for (const f of acceptedFiles) {
+      data.append('file',f)
+    }
     const currentFile = acceptedFiles[0]
     const reader = new FileReader()
     reader.addEventListener("load",()=>{

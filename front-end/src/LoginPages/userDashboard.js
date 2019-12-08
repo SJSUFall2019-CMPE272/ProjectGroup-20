@@ -190,7 +190,7 @@ export class Dashboard extends Component{
                                 mode="inline">
                                 
                                 <Menu.Item key='Images'>
-                                    <Link to="/UserDashboard/image">Images
+                                    <Link to="/UserDashboard">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
@@ -217,7 +217,7 @@ export class Dashboard extends Component{
                                 </Route>}
                                 
                                 <Route 
-                                    path={"/UserDashboard/image"}
+                                    exact path={"/UserDashboard"}
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
