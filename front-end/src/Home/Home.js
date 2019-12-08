@@ -6,6 +6,7 @@ import axios from 'axios'
 import {BrowserRouter as Router,Route, Link} from 'react-router-dom'
 import plantImage from '../assets/plantb.jpg'
 import farmImage from '../assets/agriculture.jpg'
+import { Avatar } from 'antd';
 
 import { DatePicker, message } from 'antd';
 
@@ -178,7 +179,7 @@ export default class Home extends Component{
         
         </Container>
         {/* <Container> */}
-          <Row style={{paddingBottom: "1em", marginTop: "1em", marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center", color:'white',  backgroundColor:"#698e47"}}>
+          <Row name="about" style={{paddingBottom: "1em", marginTop: "1em", marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center", color:'white',  backgroundColor:"#698e47"}}>
               <h4 style={{color:"white"}}>About</h4>
               <Col>
               <p>Agriculture in the United States is a major 
@@ -199,8 +200,28 @@ export default class Home extends Component{
                  <img src={farmImage} width="320" height="213" />
                  </Col>
           </Row>
-          <Row style={{marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center"}}>
+          <Row name="contact" style={{marginLeft:"0em", paddingTop:"1em", paddingLeft:"1em", paddingRight:"1em", width: "100%", textAlign: "center"}}>
             <h4 style={{color:"black"}}>Contact</h4>
+            <Col>
+            <Avatar size="large" icon="user" />
+            <h5>Ryan Choy</h5>
+            <h6>Email: zheyuanryan.choy@sjsu.edu</h6>
+            </Col>
+            <Col>
+            <Avatar size="large" icon="user" />
+            <h5>Robert Campbell</h5>
+            <h6>Email: robertgcampbell95@gmail.com</h6>
+            </Col>
+            <Col>
+            <Avatar size="large" icon="user" />
+            <h5>Muslim Razi</h5>
+            <h6>Email: muslim.razi@sjsu.edu</h6>
+            </Col>
+            <Col>
+            <Avatar size="large" icon="user" />
+            <h5>Eduardo Lemus</h5>
+            <h6>Email: edu.lemuss@gmail.com</h6>
+            </Col>
           </Row>
 
         {/* </Container> */}
