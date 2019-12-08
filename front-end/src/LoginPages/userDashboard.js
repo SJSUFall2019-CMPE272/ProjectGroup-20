@@ -208,7 +208,7 @@ export class Dashboard extends Component{
                                 </Route>}
                                 
                                 <Route 
-                                    path={"/UserDashboard"}
+                                    exact path={"/UserDashboard"}
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
