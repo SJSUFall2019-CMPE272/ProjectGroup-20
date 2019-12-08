@@ -78,7 +78,7 @@ class ImageComp extends Component{
             
             //var Url = 'http://184.172.252.173:30120/upload/image/'+final
             var Url = '/classify/'+final
-            
+            console.log(response.data)
             this.state.allImages = response.data
             this.forceUpdate()
             return axios({
@@ -89,7 +89,7 @@ class ImageComp extends Component{
         }).then(res=>{
             this.state.species = res.data.prediction.species[0].class
             this.state.speciesScore = res.data.prediction.species[0].score
-            this.state.disease = res.data.prediction.disease[0].class
+            this.state.disease = res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
             this.state.diseaseScore = res.data.prediction.species[0].score
             console.log(this.state.species,this.state.speciesScore,this.state.disease,this.state.diseaseScore)
             
@@ -108,7 +108,6 @@ class ImageComp extends Component{
 
         const Data = new FormData()
         Data.append('file',final)
-        console.log(Data)
         this.setState({
             imageClicked : true
         })
@@ -122,12 +121,11 @@ class ImageComp extends Component{
             console.log(res.data)
             this.setState({
                 species : res.data.prediction.species[0].class,
-                disease : res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class
+                speciesScore: res.data.prediction.species[0].score,
+                disease : res.data.prediction.disease.length == 0 ? "healthy" : res.data.prediction.disease[0].class,
+                diseaseScore: res.data.prediction.species[0].score
             })
-            
-
             console.log(this.state.species)
-            alert("Plant type="+ this.state.species +"\nDisease ="+this.state.disease)
         })
         .catch(err=>{
             console.log(err)
@@ -143,8 +141,10 @@ class ImageComp extends Component{
                         return( <div>
                             <ListGroup.Item onClick={this.handleImageClick.bind(this)}>
                                 <Card title={name}>
-                                    <p>{this.state.species}</p>
-                                    <p>{this.state.disease}</p>
+                                    <p>Species: {this.state.species}</p>
+                                    <p>Confidence Score: {((this.state.speciesScore)*100).toFixed(2)}</p>
+                                    <p>Disease: {this.state.disease}</p>
+                                    <p>Confidence Score: {((this.state.diseaseScore)*100).toFixed(2)}</p>
                                 </Card>
                                 </ListGroup.Item></div>
                         )
@@ -190,7 +190,7 @@ export class Dashboard extends Component{
                                 mode="inline">
                                 
                                 <Menu.Item key='Images'>
-                                    <Link to="/UserDashboard">Images
+                                    <Link to="/UserDashboard/image">Images
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key='upload'>
@@ -217,7 +217,7 @@ export class Dashboard extends Component{
                                 </Route>}
                                 
                                 <Route 
-                                    exact path={"/UserDashboard"}
+                                    path={"/UserDashboard/image"}
                                     render = {props=>(<ImageComp {...props} />)} 
                                     />
                                 <Route exact path="/UserDashboard/account">
